@@ -1,0 +1,34 @@
+import mongoose from "mongoose";
+const bookingSchema = new mongoose.Schema({
+  event: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Event",
+    required: true
+  },
+
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true
+  },
+
+  seatsBooked: {
+    type: Number,
+    default: 0
+  },
+
+  paymentStatus: {
+    type: String,
+    enum: ["Pending", "Completed", "Failed"],
+    default: "Completed" //Testing Purpose "Completed" later make it "pending"
+  },
+
+  bookingStatus: {
+    type: String,
+    enum: ["Confirmed", "Cancelled"],
+    default: "Confirmed"
+  }
+
+}, { timestamps: true });
+
+export const Book = mongoose.model("Book",bookingSchema);

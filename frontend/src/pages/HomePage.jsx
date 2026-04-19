@@ -1,0 +1,83 @@
+import { Box, ThemeProvider } from "@mui/material"
+import { darkTheme } from "../constants/constant";
+import { SideBar } from "../components/SideBar";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useContext } from "react";
+import UserContext from "../context/UserContext";
+import toast from "react-hot-toast";
+import Navbar from "../components/Navbar";
+import AddEvent from "./AddEvent";
+import Orders from "./Orders";
+
+const HomePage=()=>{
+    
+    const [choice,setChoice]=useState("Dashboard");
+    const {Info,authUser,setAuthUser} = useContext(UserContext);
+    const [search,setSearch]=useState("");
+    useEffect(() => {
+    if (!Info) return;
+
+    const UserDetails = async () => {
+        try {
+        const info = await Info();
+        setAuthUser(info.data.data);
+        } catch (error) {
+        toast.error(error?.response?.data?.message);
+        }
+    };
+
+    UserDetails();
+    }, []);
+    
+    const renderPage=()=>{
+    switch(choice)
+    {
+       case "Add Events": return <AddEvent/>;
+                        break;
+       case "Orders": return <Orders/>;
+                        break;
+      default: return <div>Welcome</div>;
+    }
+  }
+    return (
+    <ThemeProvider theme={darkTheme}>
+        <Box
+        sx={{
+          width: "100vw",
+          height: "100vh",
+          display: "flex",
+          background:"linear-gradient(135deg, #020617, #0f172a, #020617)",
+          overflow: "hidden"
+        }}
+      >
+    <SideBar authUser={authUser} active={choice} setActive={setChoice}/>
+    <Box
+    sx={{
+      flex: 1,             
+      display: "flex",
+      flexDirection: "column", 
+      minWidth: 0, 
+      borderWidth: "10%"
+    }}
+  >
+        <Navbar setSearch={setSearch} setAuthUser={setAuthUser}/>
+        <Box
+            sx={{
+              flex: 1,
+              p: 1,
+              overflowY: "auto",
+              scrollbarWidth: "none",
+              "&::-webkit-scrollbar": { display: "none" },
+            }}
+          >
+            {renderPage()}
+          </Box>
+        </Box>
+
+      </Box>
+    </ThemeProvider>
+    )
+}
+
+export default HomePage;
