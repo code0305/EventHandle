@@ -80,3 +80,17 @@ export const getAllEvents = async (req,res) => {
       return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
   }
 }
+
+export const DeleteEvent = async(req,res)=>{
+  try {
+    const id= req.params.id;
+    const ExistingEvent = await Event.findByIdAndDelete(id);
+    if(!ExistingEvent)
+    {
+        return res.status(404).json({success:false,message:"Event Doesn't Exist"})
+    }
+    return res.status(200).json({success:true,message:"Event Deleted "})
+  } catch (error) {
+          return res.status(500).json({success:false,message:"Error while Deleting : "+error.message});
+  }
+}

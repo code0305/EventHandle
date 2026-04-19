@@ -20,7 +20,7 @@ const EventProvider =({children})=>{
         }
     }
 
-    const AllEvents =async()=>{
+    const allEvents =async()=>{
         try {
             const res = await axios.get(`${BaseUrl}/post/events`);
             return res.data.data;
@@ -28,9 +28,18 @@ const EventProvider =({children})=>{
             throw error;
         }
     }
+
+    const deleteEvent=async (data) => {
+        try {
+            return await axios.delete(`${BaseUrl}/post/delete/${data}`);
+        } catch (error) {
+            throw error;
+        }
+    }
     const value ={
         addEvent,
-        AllEvents
+        allEvents,
+        deleteEvent
     }
     return(
         <EventContext.Provider value={value}>
