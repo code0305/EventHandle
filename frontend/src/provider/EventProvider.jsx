@@ -36,10 +36,20 @@ const EventProvider =({children})=>{
             throw error;
         }
     }
+
+    const eventData=async(data)=>
+    {
+        try {
+            return await axios.get(`${BaseUrl}/post/event/${data}`);
+        } catch (error) {
+            throw error;
+        }
+    }
     const value ={
         addEvent,
         allEvents,
-        deleteEvent
+        deleteEvent,
+        eventData
     }
     return(
         <EventContext.Provider value={value}>

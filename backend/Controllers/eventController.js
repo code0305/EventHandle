@@ -94,3 +94,17 @@ export const DeleteEvent = async(req,res)=>{
           return res.status(500).json({success:false,message:"Error while Deleting : "+error.message});
   }
 }
+
+export const getBycategory = async (req,res) => {
+  try {
+    const category = req.params.category;
+    const data = await Event.find({category: category});
+    if(!data)
+    {
+          return res.status(400).json({success:false,message:"Data is Empty"})
+    }
+    res.status(200).json({success:true,message:"Event Data",data:data})
+  } catch (error) {
+      return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
+  }
+}
