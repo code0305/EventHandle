@@ -10,11 +10,17 @@ import Navbar from "../components/Navbar";
 import AddEvent from "./AddEvent";
 import Orders from "./Orders";
 import StarLayout from "../components/StarLayout";
+import Events from "./Events";
 
 const HomePage=()=>{
     
     const [choice,setChoice]=useState("Dashboard");
     const {Info,authUser,setAuthUser} = useContext(UserContext);
+    const [selectedCategory, setSelectedCategory] = useState(null);
+    const handleClick=(category)=>{
+      setSelectedCategory(category);
+      setChoice("Events");
+    }
     const [search,setSearch]=useState("");
     useEffect(() => {
     if (!Info) return;
@@ -36,10 +42,13 @@ const HomePage=()=>{
     {
        case "Add Events": return <AddEvent/>;
                         break;
-        case"Dashboard": return <StarLayout/>;
+        case"Dashboard": return <StarLayout setSelectedCategory={setSelectedCategory} setChoice={setChoice}/>;
                         break;
        case "Orders": return <Orders/>;
                         break;
+      case "Events":
+          return <Events category={selectedCategory} />;
+
       default: return <div>Welcome</div>;
     }
   }

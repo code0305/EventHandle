@@ -14,10 +14,13 @@ import { useState } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { darkTheme } from './constants/constant';
+import Events from './pages/Events';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
+
   const [loading, setLoading] = useState(true);
+
 useEffect(() => {
   const fetchData = async () => {
     try {
@@ -53,6 +56,7 @@ useEffect(() => {
       </ThemeProvider>
   );
   }
+
   return (
     <>
     <Toaster position="top-center"
@@ -85,6 +89,7 @@ useEffect(() => {
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
       <Route path='/' element={authUser?<HomePage/>:(<Navigate to='/signin'/>)}/>
+      <Route path='/event' element={<Events/>}/>
     </Routes>
     </BrowserRouter>
     </>

@@ -11,13 +11,10 @@ const Item = styled(Paper)(({ theme }) => ({
   ...theme.typography.body2,
   padding: theme.spacing(2),
   textAlign: 'center',
-  color: (theme.vars ?? theme).palette.text.secondary,
-  ...theme.applyStyles('dark', {
-    backgroundColor: '#1A2027',
-  }),
+  color: (theme.vars ?? theme).palette.text.secondary
 }));
 
-export default function StarLayout() {
+export default function StarLayout({setSelectedCategory,setChoice}) {
     const nav = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 ,height: {
@@ -31,6 +28,7 @@ export default function StarLayout() {
 {images.map((item, index) => (
   <Grid key={index} xs={6} sm={4} md={3} sx={{mt:2}}>
     <Item
+    onClick={()=>{setSelectedCategory(item.name);setChoice("Events");}}
       sx={{
         width: "100%",
         height: {
