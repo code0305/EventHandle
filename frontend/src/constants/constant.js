@@ -1,3 +1,9 @@
+import BusinessIcon from "../assets/Business.jpg"
+import TechnologyIcon from "../assets/technology.jpg";
+import EducationIcon from "../assets/education.jpg"
+import EntertainmentIcon from "../assets/entetainment.webp";
+import SportsIcon from '../assets/sports.jpg';
+import CulturalIcons from "../assets/Cultural.webp";
 import { createTheme } from "@mui/material";
 
 export const mostSpokenLanguages = [
@@ -12,7 +18,15 @@ export const mostSpokenLanguages = [
   "Russian",
   "Urdu"
 ];
-export const categories=["Technology","Education","Entertainment","Business","Sports","Cultural","Community"]
+
+export const images=[
+  {name:'Technology',src:TechnologyIcon},
+  {name:'Education',src:EducationIcon},
+  {name:'Entertainment',src:EntertainmentIcon},
+  {name:'Business',src:BusinessIcon},
+  {name:'Sports',src:SportsIcon},
+  {name:'Cultural',src:CulturalIcons},
+]
 export const darkTheme = createTheme({
   palette: {
     mode: "dark",

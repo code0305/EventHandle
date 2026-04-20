@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import {Box,ThemeProvider,Stepper,Step,StepLabel,Button,Typography,TextField,MenuItem,Paper, Select, InputLabel} from "@mui/material";
 
-import { categories, darkTheme } from "../constants/constant";
+import { images, darkTheme } from "../constants/constant";
 import { useContext } from "react";
 import EventContext from "../context/EventContext";
 import toast from "react-hot-toast";
@@ -138,8 +138,8 @@ setEventData({
         sx={{mt:1}}
         fullWidth
         >
-        {categories.map((item) => (
-          <MenuItem key={item} value={item}>{item}</MenuItem>
+        {images.map((item) => (
+          <MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>
         ))}
       </TextField>
             <TextField

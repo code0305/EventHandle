@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import Navbar from "../components/Navbar";
 import AddEvent from "./AddEvent";
 import Orders from "./Orders";
+import StarLayout from "../components/StarLayout";
 
 const HomePage=()=>{
     
@@ -34,6 +35,8 @@ const HomePage=()=>{
     switch(choice)
     {
        case "Add Events": return <AddEvent/>;
+                        break;
+        case"Dashboard": return <StarLayout/>;
                         break;
        case "Orders": return <Orders/>;
                         break;
