@@ -6,11 +6,24 @@ import { useContext, useEffect, useState } from 'react';
 import EventContext from '../context/EventContext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import toast from 'react-hot-toast';
+import ConfirmDelete from '../components/Warning';
 
 const paginationModel = { page: 0, pageSize: 5 };
 
 export default function Orders() {
     const{allEvents,deleteEvent}=useContext(EventContext);
+      const [open, setOpen] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
+
+  const handleDeleteClick = (id) => {
+    setSelectedId(id);
+    setOpen(true);
+  };
+
+  const handleConfirmDelete = () => {
+    handleDelete(selectedId); // your existing delete function
+    setOpen(false);
+  };
     const [data,setData]=useState([]);
     const handleDelete=async(id)=>{
       try {
@@ -42,11 +55,16 @@ export default function Orders() {
           </Button>
 
           <Button
-            onClick={() => handleDelete(params.row.id)}
-            sx={{background:"#e40707",color:'white'}}
-          >
-            <DeleteIcon sx={{height:"15px",width:"15px"}}/>
-          </Button>
+        onClick={() => handleDeleteClick(params.row.id)}
+        sx={{ background: "#e40707", color: "white" }}
+      >
+        <DeleteIcon sx={{ height: "15px", width: "15px" }} />
+      </Button>
+      <ConfirmDelete
+        open={open}
+        onClose={() => setOpen(false)}
+        onConfirm={handleConfirmDelete}
+      />
         </>
       );
     }
