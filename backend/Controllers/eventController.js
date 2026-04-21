@@ -108,3 +108,17 @@ export const getBycategory = async (req,res) => {
       return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
   }
 }
+
+export const EventByID =async(req,res)=>{
+    try {
+    const id = req.params.id;
+    const event = await Event.findById(id);
+    if(!event)
+    {
+          return res.status(400).json({success:false,message:"Event Data Not Found"})
+    }
+    res.status(200).json({success:true,message:"Event Data",data:event})
+  } catch (error) {
+      return res.status(400).json({success:false,message:"Error while fetching event: "+error.message});
+  }
+}

@@ -45,11 +45,22 @@ const EventProvider =({children})=>{
             throw error;
         }
     }
+
+    const detailsById = async (data) => {
+        try {
+            
+            const res= await axios.get(`${BaseUrl}/post/details/${data}`);
+            return res
+        } catch (error) {
+            throw error;
+        }
+    }
     const value ={
         addEvent,
         allEvents,
         deleteEvent,
-        eventData
+        eventData,
+        detailsById
     }
     return(
         <EventContext.Provider value={value}>

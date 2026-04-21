@@ -282,7 +282,7 @@ setEventData({
     <Button variant="contained" component="label" sx={{mt:1}}
 
         fullWidth>
-      <Typography sx={{fontWeight:500 ,color:"#f3f0f0"}} >Upload Banner</Typography>
+      <Typography sx={{fontWeight:500 ,color:"#f3f0f0"}} > Pic && Banner</Typography>
       <input
         type="file"
         label="Banner Image"
@@ -296,8 +296,8 @@ setEventData({
 
       case 3:
   return (
-    <Paper sx={{ p: 3 ,backdropFilter: "blur(10px)",background: "rgba(2,6,23,0.7)",}}>
-      <Typography variant="h5" mb={2}>
+    <Paper sx={{ p: 3 ,backdropFilter: "blur(10px)",background: "rgba(2,6,23,0.7)",gap:1}}>
+      <Typography variant="h5" sx={{mb:2,textAlign:"center"}}>
         Review Event Details
       </Typography>
 

@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from 'react';
 import EventContext from '../context/EventContext';
 import UserContext from '../context/UserContext';
 
-const Events = ({ category }) => {
+const Events = ({ category,setChoice,setId }) => {
   const [data,setData]=useState([]);
   const {eventData}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
@@ -99,16 +99,22 @@ const Events = ({ category }) => {
               authUser.Role==="Admin"?(
                 <>
                 <Box sx={{display:"flex",gap:2}}>
-            <Button variant="contained" sx={{mt:1,width:70,px:7}}>
+            <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={() => {
+              setId(event?._id);
+              setChoice("Update");
+            }}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Update</Typography>
             </Button>
             <Button variant="contained" sx={{mt:1,width:70,px:7}}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Report</Typography>
             </Button>
+            <Button variant="contained" sx={{mt:1,width:70,px:7}}>
+              <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
+            </Button>
             </Box>
                 </>
               ):(<>
-            <Button variant="contained" sx={{mt:1,width:130}}>
+            <Button variant="contained" sx={{mt:1,width:130,px:7}}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Book</Typography>
             </Button>
               </>)

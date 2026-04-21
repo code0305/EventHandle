@@ -11,12 +11,14 @@ import AddEvent from "./AddEvent";
 import Orders from "./Orders";
 import StarLayout from "../components/StarLayout";
 import Events from "./Events";
+import UpdatePage from "./UpdatePage";
 
 const HomePage=()=>{
     
     const [choice,setChoice]=useState("Dashboard");
     const {Info,authUser,setAuthUser} = useContext(UserContext);
     const [selectedCategory, setSelectedCategory] = useState(null);
+    const [id,setID]=useState(null);
     const handleClick=(category)=>{
       setSelectedCategory(category);
       setChoice("Events");
@@ -47,7 +49,10 @@ const HomePage=()=>{
        case "Orders": return <Orders/>;
                         break;
       case "Events":
-          return <Events category={selectedCategory} />;
+                    return <Events category={selectedCategory}  setId={setID} setChoice={setChoice} />;
+                    break;
+      case "Update": return <UpdatePage id={id}/>;
+                    break;
 
       default: return <div>Welcome</div>;
     }
