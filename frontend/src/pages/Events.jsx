@@ -4,8 +4,10 @@ import { useContext, useEffect, useState } from 'react';
 import EventContext from '../context/EventContext';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
+import { useNavigate } from 'react-router-dom';
 
 const Events = ({ category,setChoice,setId }) => {
+  const nav = useNavigate();
   const [data,setData]=useState([]);
   const {eventData}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
@@ -110,12 +112,13 @@ const Events = ({ category,setChoice,setId }) => {
             }}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Update</Typography>
             </Button>
+            <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={()=>nav(`/create-form/${event?._id}`)}>
+              <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
+            </Button>
             <Button variant="contained" sx={{mt:1,width:70,px:7}}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Report</Typography>
             </Button>
-            <Button variant="contained" sx={{mt:1,width:70,px:7}}>
-              <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
-            </Button>
+            
             </Box>
                 </>
               ):(<>

@@ -4,7 +4,6 @@ import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import { images } from '../constants/constant';
 import { Typography } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 
 const Item = styled(Paper)(({ theme }) => ({
   backgroundColor: '#fff',
@@ -15,7 +14,6 @@ const Item = styled(Paper)(({ theme }) => ({
 }));
 
 export default function StarLayout({setSelectedCategory,setChoice}) {
-    const nav = useNavigate();
   return (
     <Box sx={{ flexGrow: 1 ,height: {
       xs: 250,

@@ -91,7 +91,7 @@ useEffect(() => {
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
       <Route path='/' element={authUser?<HomePage/>:(<Navigate to='/signin'/>)}/>
       <Route path='/event' element={<Events/>}/>
-      <Route path ='/create-form' element={<AdminForm/>}/>
+      <Route path ='/create-form/:id' element={<AdminForm/>}/>
     </Routes>
     </BrowserRouter>
     </>

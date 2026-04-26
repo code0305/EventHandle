@@ -13,7 +13,7 @@ const feebackFormSchema = new mongoose.Schema({
         question:String,
         type:{
         type:String,
-        enum: ["text", "textarea", "rating"],
+        enum: ["text", "multiline", "rating"],
         required: true
         }
     }
