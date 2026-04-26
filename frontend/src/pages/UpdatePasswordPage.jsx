@@ -31,8 +31,12 @@ export default function UpdatePasswordPage () {
             nav("/signin");
           }
         } catch (error) {
-            toast.error(error?.response?.data?.message)
-        }
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
+    }
     }
   return (
     <ThemeProvider theme={darkTheme}>

@@ -30,7 +30,11 @@ const VerifyCode = () => {
         nav("/update-password/"+help);
     }   
     } catch (error) {
-        console.log("Error in VerifyCode"+error.message);
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
     }
   }
   

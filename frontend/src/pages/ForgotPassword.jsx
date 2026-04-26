@@ -21,8 +21,12 @@ const ForgotPassword = () => {
         nav(`/verify/${help}`);
         }
     } catch (error) {
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
         toast.error(error?.response?.data?.message);
-        }
+      }
+    }
     }
   return (
     <ThemeProvider theme={darkTheme}>

@@ -39,9 +39,12 @@ export default function SignUpPage(){
         }
         
       } catch (error) {
-        const message=(error?.response?.data?.message);
-        toast.error(message);
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
       }
+    }
     }
     return(
     <ThemeProvider theme={darkTheme}>

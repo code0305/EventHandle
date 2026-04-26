@@ -75,7 +75,7 @@ if (eventData.bannerFiles[1]) {
         toast.success(res?.data?.message);
         setchoice("Events");
       } catch (error) {
-        toast.error(error?.response?.data);
+        toast.error(error?.response?.data?.message);
       }
     };
 
@@ -119,9 +119,13 @@ if (eventData.bannerFiles[1]) {
         bannerFiles: [null, null]
       });
         } catch (error) {
-            toast.error(error?.response?.data);
-        }
-        }
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
+    }
+  };
         fetchData();
     },[id])
 

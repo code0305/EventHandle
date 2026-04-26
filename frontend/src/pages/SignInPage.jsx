@@ -33,8 +33,11 @@ export default function SignInPage() {
         })
       }
     } catch (error) {
-      const message = error?.response?.data?.message || "Something went wrong";
-    toast.error(message);
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
     }
     
   }

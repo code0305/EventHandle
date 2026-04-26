@@ -14,8 +14,12 @@ const Events = ({ category,setChoice,setId }) => {
         const res = await eventData(category);
         setData(res?.data?.data);
       } catch (error) {
-        console.log(error?.response?.data)
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
       }
+    }
     }
     fetchData();
 },[])

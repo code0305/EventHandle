@@ -108,9 +108,12 @@ setEventData({
   }
   catch (error) 
   {
-  console.log(error.message);     
-  toast.error(error?.response?.data?.message);
-  }
+      if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
+      }
+    }
   };
   const handleChange =(e)=>{
     setEventData({...eventData,[e.target.name]:e.target.value})

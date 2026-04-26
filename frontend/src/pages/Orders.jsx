@@ -32,8 +32,12 @@ export default function Orders() {
         setData(newData);
         toast.success(res?.data?.message);
       } catch (error) {
-        toast.error(error.message);
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
+        toast.error(error?.response?.data?.message);
       }
+    }
     }
     const col=[{field:'id',headerName:'ID',width:10},{field:'Organizer',headerName:'Organizer',flex:1},{field:'Email',headerName:"Organizer Email",flex:1},{field:'Name',headerName:'Event Name',flex:1},{field:'Category',headerName:'Category'},{field:'Amount',headerName:'Amount'},{field:'PaymentMode',headerName:'Payment Mode'},{field:'StartDate',headerName:'Start Date'},
       {

@@ -32,8 +32,12 @@ const HomePage=()=>{
         const info = await Info();
         setAuthUser(info.data.data);
         } catch (error) {
+          if (error.code === "ERR_NETWORK") {
+        toast.error("Server is down");
+      } else {
         toast.error(error?.response?.data?.message);
-        }
+      }
+    }
     };
 
     UserDetails();
