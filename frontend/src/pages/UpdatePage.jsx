@@ -376,11 +376,11 @@ if (eventData.bannerFiles[1]) {
 />  
     <Typography sx={{mt:2,color:"#fff"}} variant="h6">Event Logo</Typography>
     <img src={eventData?.bannerUrl?.[0]} alt="Event Banner" style={{ width: "100%", marginTop: 20, borderRadius: 8 }} />
-        <Typography sx={{mt:2,color:"#fff"}} variant="h6">Event Template</Typography>
+        <Typography sx={{mt:2,color:"#fff"}} variant="h6">Event Banner</Typography>
     <img src={eventData?.bannerUrl?.[1]} alt="Event Banner" style={{ width: "100%", marginTop: 20, borderRadius: 8 }} />
     </Box>
 
-  <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+  <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",gap:6,mt:2}}>
     <Button component="label" variant="contained" sx={{fontWeight:"bold"}} >
   Upload Logo
   <input
