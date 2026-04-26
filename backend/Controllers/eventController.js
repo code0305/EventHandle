@@ -1,6 +1,9 @@
 import { Event } from "../model/Event.js";
+import { Form } from "../model/FeedbackForm.js";
 import cloudinary from "../services/cloudinary.js";
 import fs from "fs";
+
+
 export const AddEvent =async(req,res) => {
  try {
     const data = req.body;
@@ -219,3 +222,112 @@ export const updateEvent = async (req, res) => {
         res.status(500).json({ success: false, message: "Error while updating event: " + error.message });
     }
 }
+
+
+export const createFeedbackForm = async (req, res) => {
+  try {
+    const { eventId, questions } = req.body;
+
+    if (!questions) {
+      return res.status(400).json({success: false, message: "Questions are required"});
+    }
+
+    const form = await Form.create({eventId,questions});
+
+    res.status(201).json({success: true,message: "Feedback form created",data: form});
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Create Feedback Form error "+error.message });
+  }
+};
+
+export const getFeedbackForm = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const form = await Form.findOne({ eventId });
+
+    if (!form) {
+      return res.status(400).json({success: false,message: "No feedback form available"});
+    }
+
+    res.status(200).json({success: true,data: form});
+
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Get Feedback Form error " + error.message });
+  }
+};
+
+
+export const submitFeedback = async (req, res) => {
+  try {
+    const { eventId, responses } = req.body;
+    const userId = req.user.id;
+
+    if (!eventId) {
+      return res.status(400).json({success: false,message: "No Such Event Exist"});
+    }
+
+
+    const form = await Form.findOne({ eventId });
+
+    if (!form) {
+      return res.status(400).json({success: false,message: "Feedback form not found"});
+    }
+
+    if (responses.length !== form.questions.length) {
+      return res.status(400).json({success: false,message: "All questions must be answered"});
+    }
+
+    for (let r of responses) 
+      {
+      const q = form.questions.find(q => q.questionId === r.questionId);
+
+      if (!q) {
+        return res.status(400).json({success: false,message: "Invalid questionId"});
+      }
+
+      if (q.type === "rating") {
+        const num = Number(r.answer);
+        if (num < 1 || num > 5) {
+          return res.status(400).json({success: false,message: "Rating must be between 1 and 5"});
+        }
+        r.answer = num;
+      }
+
+      if (q.type === "text" || q.type === "textarea") {
+        if (r.answer.trim() === "") {
+          return res.status(400).json({success: false,message: "Text answer required"});
+        }
+        r.answer = r.answer.trim();
+      }
+    }
+
+    const feedback = await FeedbackResponse.findOneAndUpdate(
+      { eventId, userId },
+      { responses },
+      { new: true }
+    );
+
+    return res.status(200).json({success: true,message: "Feedback submitted successfully",data: feedback});
+
+  } catch (error) {
+    console.log(error);
+
+    return res.status(500).json({success: false,message: "Update Feedback error"});
+  }
+};
+
+
+export const getAllResponses = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const responses = await FeedbackResponse.find({ eventId });
+
+    res.status(200).json({success: true,data: responses});
+
+  } catch (error) {
+    res.status(500).json({ success:false,message: "Response error"+error.message });
+  }
+};

@@ -15,6 +15,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { darkTheme } from './constants/constant';
 import Events from './pages/Events';
+import AdminForm from './components/AdminForm';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
@@ -90,6 +91,7 @@ useEffect(() => {
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
       <Route path='/' element={authUser?<HomePage/>:(<Navigate to='/signin'/>)}/>
       <Route path='/event' element={<Events/>}/>
+      <Route path ='/create-form' element={<AdminForm/>}/>
     </Routes>
     </BrowserRouter>
     </>
