@@ -122,3 +122,89 @@ export const EventByID =async(req,res)=>{
       return res.status(400).json({success:false,message:"Error while fetching event: "+error.message});
   }
 }
+
+export const updateEvent = async (req, res) => {
+    try {
+        const id = req.params.id;
+        const data = req.body;
+        const media = []; 
+
+        const existingEvent = await Event.findById(id);
+        if (!existingEvent) {
+            return res.status(404).json({ success: false, message: "Event Not Found" });
+        }
+        let updatedBanners = existingEvent.bannerUrl || [];
+
+        if (req.files?.logo) {
+            const file = req.files.logo[0];
+
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder: "EventHandle"
+            });
+
+            updatedBanners[0] = {
+                mediaType: file.mimetype.startsWith("image") ? "image" : "video",
+                mediaUrl: result.secure_url,
+                publicId: result.public_id
+            };
+
+            if (fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+        }
+        }
+
+        if (req.files?.banner) {
+            const file = req.files.banner[0];
+
+            const result = await cloudinary.uploader.upload(file.path, {
+                folder: "EventHandle"
+            });
+
+            updatedBanners[1] = {
+                mediaType: file.mimetype.startsWith("image") ? "image" : "video",
+                mediaUrl: result.secure_url,
+                publicId: result.public_id
+            };
+
+            if (fs.existsSync(file.path)) {
+            fs.unlinkSync(file.path);
+        }
+        }
+        const updatedEvent = await Event.findByIdAndUpdate(id,
+            {
+                title: data.title,
+                category: data.category,
+                description: data.description,
+                schedule: {
+
+                    startDate: data.startDate,
+                    endDate: data.endDate,
+                },
+                venue: {
+                    modeEvent: data.modeEvent,
+                    connectionLink: data.connectionLink,
+                    address: data.address,
+                    city: data.city,
+                    state: data.state,
+                },
+                organizer: {
+                    name: data.organizerName,
+                    email: data.organizerEmail,
+                    phone: data.organizerPhone,
+                },
+                pricing: {
+                    amount: data.amount,
+                    pmode: data.pmode,
+                },
+                capacity: {
+                    totalSeats: data.totalSeats,
+                },
+                bannerUrl: updatedBanners
+            },{ new: true }
+        );
+        res.status(200).json({ success: true, message: "Event Updated Successfully"});
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: "Error while updating event: " + error.message });
+    }
+}

@@ -48,19 +48,32 @@ const EventProvider =({children})=>{
 
     const detailsById = async (data) => {
         try {
-            
             const res= await axios.get(`${BaseUrl}/post/details/${data}`);
             return res
         } catch (error) {
             throw error;
         }
     }
+
+    const updateEvent = async (id, formData) => {
+    try {
+    return await axios.put(`${BaseUrl}/post/update/${id}`, formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+    } catch (error) {
+        throw error;
+    }
+    };
+
     const value ={
         addEvent,
         allEvents,
         deleteEvent,
         eventData,
-        detailsById
+        detailsById,
+        updateEvent
     }
     return(
         <EventContext.Provider value={value}>

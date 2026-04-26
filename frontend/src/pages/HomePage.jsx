@@ -51,7 +51,7 @@ const HomePage=()=>{
       case "Events":
                     return <Events category={selectedCategory}  setId={setID} setChoice={setChoice} />;
                     break;
-      case "Update": return <UpdatePage id={id}/>;
+      case "Update": return <UpdatePage id={id} setchoice={setChoice}/>;
                     break;
 
       default: return <div>Welcome</div>;

@@ -1,38 +1,95 @@
-import { Autocomplete, Box,  TextField, Typography } from '@mui/material'
+import { Autocomplete, Box,  Button,  TextField, Typography } from '@mui/material'
 import React, { useEffect } from 'react'
 import { useContext } from 'react';
 import { useState } from 'react';
 import EventContext from '../context/EventContext';
 import toast from 'react-hot-toast';
+import { red } from '@mui/material/colors';
+import { useNavigate } from 'react-router-dom';
 
-const UpdatePage = ({ id }) => {
+const UpdatePage = ({ id,setchoice }) => {
+  
+      const [eventData, setEventData] = useState({
+      title: "",
+      category: "",
+      description: "",
+      startDate: "",
+      endDate: "",
+      modeEvent: "",
+      address: "",
+      city: "",
+      state: "",
+      connectionLink: "",
+      organizerName: "",
+      organizerEmail: "",
+      organizerPhone: "",
+      pmode: "",
+      amount: "",
+      totalSeats: "",
+      bannerUrl: ["", ""],
+      bannerFiles: [null, null]
+    });
 
-    const [eventData, setEventData] = useState({
-  title: "",
-  category: "",
-  description: "",
-  startDate: "",
-  endDate: "",
-  modeEvent: "",
-  address: "",
-  city: "",
-  state: "",
-  connectionLink: "",
-  organizerName: "",
-  organizerEmail: "",
-  organizerPhone: "",
-  pmode: "",
-  amount: "",
-  totalSeats: ""
-});
+    const handleUpdate = async () => {
+      try {
+        const formData = new FormData();
+
+        // Basic fields
+        formData.append("title", eventData.title);
+        formData.append("category", eventData.category);
+        formData.append("description", eventData.description);
+
+        // Schedule
+        formData.append("startDate", eventData.startDate);
+        formData.append("endDate", eventData.endDate);
+
+        // Venue
+        formData.append("modeEvent", eventData.modeEvent);
+        formData.append("address", eventData.address);
+        formData.append("city", eventData.city);
+        formData.append("state", eventData.state);
+        formData.append("connectionLink", eventData.connectionLink);
+
+        // Organizer
+        formData.append("organizerName", eventData.organizerName);
+        formData.append("organizerEmail", eventData.organizerEmail);
+        formData.append("organizerPhone", eventData.organizerPhone);
+
+        // Pricing
+        formData.append("pmode", eventData.pmode);
+        formData.append("amount", eventData.amount);
+
+        // Capacity
+        formData.append("totalSeats", eventData.totalSeats);
+
+        // Files (only if user uploads new ones)
+if (eventData.bannerFiles[0]) {
+  formData.append("logo", eventData.bannerFiles[0]);
+}
+
+if (eventData.bannerFiles[1]) {
+  formData.append("banner", eventData.bannerFiles[1]);
+}
+
+        const res = await updateEvent(id, formData);
+        toast.success(res?.data?.message);
+        setchoice("Events");
+      } catch (error) {
+        toast.error(error?.response?.data);
+      }
+    };
+
     const handleChange=(e)=>{
         setEventData({...eventData,[e.target.name]:e.target.value})
     }
-    const {detailsById}=useContext(EventContext);
+    const {detailsById,updateEvent}=useContext(EventContext);
+
+
     useEffect(()=>{
         const fetchData=async () => {
         try {
         const res = await detailsById(id);
+        console.log(res?.data?.data)
         setEventData({
         title: res?.data?.data?.title || "",
         category: res?.data?.data?.category || "",
@@ -54,7 +111,12 @@ const UpdatePage = ({ id }) => {
         pmode: res?.data?.data?.pricing?.pmode || "",
         amount: res?.data?.data?.pricing?.amount || "",
 
-        totalSeats: res?.data?.data?.capacity?.totalSeats || ""
+        totalSeats: res?.data?.data?.capacity?.totalSeats || "",
+        bannerUrl: [
+          res?.data?.data?.bannerUrl?.[0]?.mediaUrl || "",
+          res?.data?.data?.bannerUrl?.[1]?.mediaUrl || ""
+        ],
+        bannerFiles: [null, null]
       });
         } catch (error) {
             toast.error(error?.response?.data);
@@ -79,7 +141,7 @@ const UpdatePage = ({ id }) => {
       <Typography variant="h5" sx={{color:"#fff"}}>Update Event</Typography>
 
       <TextField
-        label="Title"
+        label="Event Name"
         value={eventData.title}
         name='title'
         onChange={handleChange}
@@ -121,13 +183,26 @@ const UpdatePage = ({ id }) => {
         />
 
       <Typography sx={{mt:2,color:"#fff",gap:1}} variant="h6">Venue</Typography>
-      <TextField
+      <Autocomplete
+      freeSolo
+        options={["Online", "Offline", "Hybrid"]}
+        fullWidth
+        name='modeEvent'
+        value={eventData.modeEvent || ""}
+        onChange={(e, newValue) => {
+            setEventData({
+              ...eventData,
+              modeEvent: newValue
+            });
+          }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
             label="Event Mode"
-            value={eventData.modeEvent}
-            name='modeEvent'
-            onChange={handleChange}
             fullWidth
-        />
+          />
+        )}
+      />
       {
         eventData.modeEvent ==="Offline" && (
           <>
@@ -227,51 +302,127 @@ const UpdatePage = ({ id }) => {
         />
       
       <Typography sx={{mt:2,color:"#fff"}} variant="h6">Pricing</Typography>
-            <TextField
+            
+        <Autocomplete
+          freeSolo
+          fullWidth
+          options={["Free"]}
+          value={eventData.amount === 0 ? "Free" : String(eventData.amount)}
+          onChange={(e, newValue) => {
+            if (newValue === "Free") {
+              setEventData({ ...eventData, amount: 0 });
+            } else {
+              setEventData({ ...eventData, amount: Number(newValue)});
+            }
+          }}
+        renderInput={(params) => (
+          <TextField
+            {...params}
+            label="Ticket Price"
+            fullWidth
+          />
+        )}
+        />
+        
+      {
+        eventData.amount !== 0 && (
+          <TextField
             label="Payment Mode"
             value={eventData.pmode}
             name='pmode'
             onChange={handleChange}
             fullWidth
         />
-        <TextField
-            label="Ticket Price"
-            value={eventData.amount}
-            name='amount'
-            onChange={handleChange}
-            fullWidth
-        />
-        
-      {
-        eventData.amount === 0 && (
-          <Typography><b>Ticket Price Free</b></Typography>
         )
       }
 
       <Typography sx={{mt:2,color:"#fff"}} variant="h6">Capacity</Typography>
       <Autocomplete
-      freeSolo
-      fullWidth
-      options={["Unlimited Seats"]}
-      value={
-        eventData.totalSeats? (eventData.totalSeats): "Unlimited Seats"
-      }
-      onChange={handleChange}
-      onInputChange={(e, newInputValue) => {
-        if (newInputValue === "Unlimited Seats") {
-          setEventData({ ...eventData, totalSeats: null });
-        } else {
-          setEventData({ ...eventData, totalSeats: newInputValue });
-        }
-      }}
-      renderInput={(params) => (
-        <TextField
-          {...params}
-          label="Total Seats"
-          fullWidth
-        />
-      )}
-    />
+  freeSolo
+  fullWidth
+  options={["Unlimited Seats"]}
+  value={
+    eventData.totalSeats
+      ? String(eventData.totalSeats)
+      : "Unlimited Seats"
+  }
+  onChange={(e, newValue) => {
+    if (newValue === "Unlimited Seats") {
+      setEventData({ ...eventData, totalSeats: 0 });
+    } else {
+      setEventData({
+        ...eventData,
+        totalSeats: Number(newValue) || 0
+      });
+    }
+  }}
+  onInputChange={(e, newInputValue) => {
+    if (newInputValue === "Unlimited Seats" || newInputValue === "") {
+      setEventData({ ...eventData, totalSeats: 0 });
+    } else if (/^\d*$/.test(newInputValue)) {
+      setEventData({
+        ...eventData,
+        totalSeats: Number(newInputValue)
+      });
+    }
+  }}
+  renderInput={(params) => (
+    <TextField {...params} label="Total Seats" fullWidth />
+  )}
+/>  
+    <Typography sx={{mt:2,color:"#fff"}} variant="h6">Event Logo</Typography>
+    <img src={eventData?.bannerUrl?.[0]} alt="Event Banner" style={{ width: "100%", marginTop: 20, borderRadius: 8 }} />
+        <Typography sx={{mt:2,color:"#fff"}} variant="h6">Event Template</Typography>
+    <img src={eventData?.bannerUrl?.[1]} alt="Event Banner" style={{ width: "100%", marginTop: 20, borderRadius: 8 }} />
+    </Box>
+
+  <Box sx={{display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>
+    <Button component="label" variant="contained" sx={{fontWeight:"bold"}} >
+  Upload Logo
+  <input
+    hidden
+    type="file"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      const updatedFiles = [...eventData.bannerFiles];
+      updatedFiles[0] = file;
+
+      setEventData({
+        ...eventData,
+        bannerFiles: updatedFiles
+      });
+    }}
+  />
+</Button>
+
+<Button component="label" variant="contained" sx={{fontWeight:"bold"}} >
+  Upload Banner
+  <input
+    hidden
+    type="file"
+    onChange={(e) => {
+      const file = e.target.files[0];
+      const updatedFiles = [...eventData.bannerFiles];
+      updatedFiles[1] = file;
+
+      setEventData({
+        ...eventData,
+        bannerFiles: updatedFiles
+      });
+    }}
+  />
+</Button>
+</Box>
+
+
+
+    <Box sx={{display:"flex",justifyContent:"space-between",gap:2,mt:2,pr:2}}>
+    <Button
+    onClick={() => setchoice("Events")}
+    >
+      Cancel
+    </Button >
+    <Button variant='contained' sx={{fontWeight:"bold",width:40,px:5}} onClick={handleUpdate}>Update</Button>
     </Box>
     </>
   )
