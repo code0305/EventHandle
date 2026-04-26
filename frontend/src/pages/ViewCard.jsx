@@ -11,6 +11,7 @@ import axios from 'axios';
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export const ViewCard = ({ search }) => {
   const navigate = useNavigate();

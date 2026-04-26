@@ -3,6 +3,7 @@ import BusinessIcon from "../assets/Business.jpg";
 import { useContext, useEffect, useState } from 'react';
 import EventContext from '../context/EventContext';
 import UserContext from '../context/UserContext';
+import toast from 'react-hot-toast';
 
 const Events = ({ category,setChoice,setId }) => {
   const [data,setData]=useState([]);
