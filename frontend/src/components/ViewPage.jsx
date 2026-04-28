@@ -17,7 +17,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 const ViewPage = () => {
 
-  const nav = useNavigate
+  const nav =  useNavigate();
   const { detailsById } = useContext(EventContext);
   const { id } = useParams();
 
@@ -39,8 +39,6 @@ const ViewPage = () => {
         const res = await detailsById(id);
         if (res?.data?.success) {
           setEvent(res?.data?.data);
-          console.log(res?.data?.data);
-          toast.success("Welcome");
         }
       } catch (error) {
         if (error.code === "ERR_NETWORK") {
@@ -343,7 +341,7 @@ const ViewPage = () => {
           mb: 4
         }}
       >
-        Thank you for being part of this event. Stay tuned for more!
+        Thank you for being part of this event.
       </Typography>
 
       {/* 🔘 Button (optional) */}
@@ -355,7 +353,7 @@ const ViewPage = () => {
           borderRadius: "30px",
           background: "linear-gradient(135deg, #22c55e, #16a34a)"
         }}
-        onClick={nav("/")}
+        onClick={()=>nav("/")}
       >
         Explore More Events
       </Button>

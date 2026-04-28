@@ -2,6 +2,7 @@ import { Event } from "../model/Event.js";
 import { Form } from "../model/FeedbackForm.js";
 import cloudinary from "../services/cloudinary.js";
 import fs from "fs";
+import { updateEventStatuses } from "../util/updateStatus.js";
 
 
 export const AddEvent =async(req,res) => {
@@ -106,11 +107,13 @@ export const DeleteEvent = async(req,res)=>{
 export const getBycategory = async (req,res) => {
   try {
     const category = req.params.category;
+    await updateEventStatuses();
     const data = await Event.find({category: category});
     if(!data)
     {
           return res.status(200).json({success:true,message:"Data is Empty"})
     }
+    
     res.status(200).json({success:true,message:"Event Data",data:data})
   } catch (error) {
       return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
@@ -214,7 +217,7 @@ export const updateEvent = async (req, res) => {
                     totalSeats: data.totalSeats,
                 },
                 bannerUrl: updatedBanners
-            },{ new: true }
+            },{returnDocument: "after"}
         );
         res.status(200).json({ success: true, message: "Event Updated Successfully"});
     } catch (error) {

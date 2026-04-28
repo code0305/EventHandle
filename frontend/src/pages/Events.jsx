@@ -15,6 +15,7 @@ const Events = ({ category,setChoice,setId }) => {
     const fetchData=async()=>{
       try {
         const res = await eventData(category);
+        console.log(res?.data?.data)
         setData(res?.data?.data);
       } catch (error) {
           if (error.code === "ERR_NETWORK") {
@@ -42,7 +43,7 @@ const Events = ({ category,setChoice,setId }) => {
       data.map((event,index)=>(
         
         <Card 
-        onClick={() => nav(`/view/${event._id}`)}
+        
         sx={{
           p: 2,
           borderRadius: 1,
@@ -80,7 +81,7 @@ const Events = ({ category,setChoice,setId }) => {
             />
           </Box>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" fontWeight="bold" >
+            <Typography variant="h6" fontWeight="bold" onClick={()=>{nav(`/view/${event._id}`)}} sx={{cursor:"pointer"}}>
               {event?.title}
             </Typography>
 

@@ -5,7 +5,7 @@ import { connectDb } from './Connection/connection.js';
 import authRouter from './Routes/authRoute.js';
 import cors from "cors";
 import PostRouter from './Routes/eventRoute.js';
-
+import "./util/statusJob.js"
 dotenv.config();
 const server = express();
 const PORT = process.env.PORT

@@ -45,7 +45,7 @@ const handleComplete = async()=>{
         const res = await createForm({questions,eventId:id})
         if(res?.data?.success){
             toast.success(res?.data?.message)
-            nav('/');
+            
         }
     } catch (error) {
       if (error.code === "ERR_NETWORK") {
