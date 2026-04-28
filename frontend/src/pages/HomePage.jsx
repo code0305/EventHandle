@@ -53,7 +53,7 @@ const HomePage=()=>{
        case "Orders": return <Orders/>;
                         break;
       case "Events":
-                    return <Events category={selectedCategory}  setId={setID} setChoice={setChoice} />;
+                    return <Events category={selectedCategory}  setId={setID} setChoice={setChoice} search={search} />;
                     break;
       case "Update": return <UpdatePage id={id} setchoice={setChoice}/>;
                     break;

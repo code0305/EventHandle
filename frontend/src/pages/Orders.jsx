@@ -42,7 +42,7 @@ export default function Orders() {
       }
     }
     }
-    const col=[{field:'id',headerName:'ID',width:10},{field:'Organizer',headerName:'Organizer',flex:1},{field:'Email',headerName:"Organizer Email",flex:1},{field:'Name',headerName:'Event Name',flex:1},{field:'Category',headerName:'Category'},{field:'Amount',headerName:'Amount(Rs)'},{field:'StartDate',headerName:'Start Date'},
+    const col=[{field:'id',headerName:'ID',width:10},{field:'Organizer',headerName:'Organizer',flex:1},{field:'Email',headerName:"Organizer Email",flex:1},{field:'Name',headerName:'Event Name',flex:1},{field:'Category',headerName:'Category'},{field:'Amount',headerName:'Amount(₹)'},{field:'StartDate',headerName:'Start Date'},
       {
         field: 'Status',
         headerName: 'Status',

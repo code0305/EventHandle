@@ -67,7 +67,6 @@ export default function Navbar({setSearch,setAuthUser}) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
     const logout = async () => {
           try {
             const res = await Logout();
@@ -154,7 +153,8 @@ export default function Navbar({setSearch,setAuthUser}) {
             <StyledInputBase
               placeholder=" Search Events"
               inputProps={{ 'aria-label': '  search' }}
-              onChange={(e) => setSearch(e.target.value)}
+              onChange={(e) => setSearch(e.target.value) }
+              
             />
           </Search>
           <Box/>

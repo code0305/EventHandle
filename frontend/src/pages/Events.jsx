@@ -6,11 +6,21 @@ import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 
-const Events = ({ category,setChoice,setId }) => {
+const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
   const [data,setData]=useState([]);
   const {eventData}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
+
+const filteredData = data.filter((event) => {
+  if (!search) return true;
+
+  const text = search.toLowerCase();
+
+  return (
+    event?.title?.toLowerCase().includes(text)
+  );
+});
   useEffect(()=>{
     const fetchData=async()=>{
       try {
@@ -26,11 +36,11 @@ const Events = ({ category,setChoice,setId }) => {
     }
     }
     fetchData();
-},[])
+},[category])
   return (
     <>
     {
-      data.length===0 ? (
+      filteredData.length===0 ? (
         <Typography variant="h6" sx={{ mb: 3, fontWeight: "bold",color:"white",textAlign:"center" }}>
           No Events Available in {category} Category
         </Typography>
@@ -40,7 +50,7 @@ const Events = ({ category,setChoice,setId }) => {
         {category} Events
       </Typography>
       {
-      data.map((event,index)=>(
+      filteredData.map((event,index)=>(
         
         <Card 
         
@@ -128,7 +138,7 @@ const Events = ({ category,setChoice,setId }) => {
                 </>
               ):(<>
             <Button variant="contained" sx={{mt:1,width:130,px:7}} 
-        onClick={nav(`/view/${event._id}`)}
+        onClick={()=>nav(`/view/${event._id}`)}
         >
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Book</Typography>
             </Button>
