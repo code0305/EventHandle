@@ -7,8 +7,10 @@ import EventContext from '../context/EventContext';
 import DeleteIcon from '@mui/icons-material/Delete';
 import toast from 'react-hot-toast';
 import ConfirmDelete from '../components/Warning';
+import { useNavigate } from 'react-router-dom';
 
-const paginationModel = { page: 0, pageSize: 5 };
+const paginationModel = { page: 0, pageSize: 7 };
+
 
 export default function Orders() {
     const{allEvents,deleteEvent}=useContext(EventContext);
@@ -24,6 +26,7 @@ export default function Orders() {
     handleDelete(selectedId); // your existing delete function
     setOpen(false);
   };
+  const nav = useNavigate();
     const [data,setData]=useState([]);
     const handleDelete=async(id)=>{
       try {
@@ -39,7 +42,7 @@ export default function Orders() {
       }
     }
     }
-    const col=[{field:'id',headerName:'ID',width:10},{field:'Organizer',headerName:'Organizer',flex:1},{field:'Email',headerName:"Organizer Email",flex:1},{field:'Name',headerName:'Event Name',flex:1},{field:'Category',headerName:'Category'},{field:'Amount',headerName:'Amount'},{field:'PaymentMode',headerName:'Payment Mode'},{field:'StartDate',headerName:'Start Date'},
+    const col=[{field:'id',headerName:'ID',width:10},{field:'Organizer',headerName:'Organizer',flex:1},{field:'Email',headerName:"Organizer Email",flex:1},{field:'Name',headerName:'Event Name',flex:1},{field:'Category',headerName:'Category'},{field:'Amount',headerName:'Amount(Rs)'},{field:'StartDate',headerName:'Start Date'},
       {
         field: 'Status',
         headerName: 'Status',
@@ -53,7 +56,7 @@ export default function Orders() {
       return (
         <>
           <Button
-            onClick={() => handleView(params.row.id)}
+            onClick={() => nav(`/view/${params.row.id}`)}
           >
             View
           </Button>
@@ -78,7 +81,7 @@ export default function Orders() {
      if (data.length>0) 
       {
       data.map((item, index)=>{
-        rows.push({id:item._id,Organizer:item.organizer.name,Email:item.organizer.email,Name:item.title,Category:item.category,Amount:item.pricing.amount,PaymentMode:item.pricing.pmode,StartDate:item.schedule.startDate.split('T')[0],Status:item.status});
+        rows.push({id:item._id,Organizer:item.organizer.name,Email:item.organizer.email,Name:item.title,Category:item.category,Amount:item.pricing.amount,StartDate:item.schedule.startDate.split('T')[0],Status:item.status});
       })
     }
 
@@ -101,15 +104,14 @@ export default function Orders() {
   rows={rows}
   columns={col}
   initialState={{ pagination: { paginationModel } }}
-  pageSizeOptions={[5, 10]}
+  pageSizeOptions={[7, 10]}
   sx={{
     border: 0,
     color: "#e2e8f0",
-    textAlign: "center",
-    // Main background
+    display:"flex",
+    justifyContent: "center",
     backgroundColor: "#020617",
 
-    // Header
     "& .MuiDataGrid-columnHeaders": {
       color: "#38bdf8",
       fontSize: "16px",
@@ -117,17 +119,14 @@ export default function Orders() {
     "& .MuiDataGrid-columnHeader": {
       backgroundColor: "#0f172a",
     },
-    // Rows
     "& .MuiDataGrid-row": {
       backgroundColor: "#020617",
     },
 
-    // Row hover
     "& .MuiDataGrid-row:hover": {
       backgroundColor: "#2d3849",
     },
 
-    // Cells
     "& .MuiDataGrid-cell": {
       borderBottom: "1px solid #1e293b",
     },

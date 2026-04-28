@@ -311,7 +311,7 @@ if (eventData.bannerFiles[1]) {
           freeSolo
           fullWidth
           options={["Free"]}
-          value={eventData.amount === 0 ? "Free" : String(eventData.amount)}
+          value={eventData?.amount == 0 ? "Free" : String(eventData?.amount)}
           onChange={(e, newValue) => {
             if (newValue === "Free") {
               setEventData({ ...eventData, amount: 0 });
@@ -329,7 +329,7 @@ if (eventData.bannerFiles[1]) {
         />
         
       {
-        eventData.amount !== 0 && (
+        eventData.amount != 0 && (
           <TextField
             label="Payment Mode"
             value={eventData.pmode}

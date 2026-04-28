@@ -16,6 +16,7 @@ import { ThemeProvider } from '@emotion/react';
 import { darkTheme } from './constants/constant';
 import Events from './pages/Events';
 import AdminForm from './components/AdminForm';
+import ViewPage from './components/ViewPage';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
@@ -92,6 +93,7 @@ useEffect(() => {
       <Route path='/' element={authUser?<HomePage/>:(<Navigate to='/signin'/>)}/>
       <Route path='/event' element={<Events/>}/>
       <Route path ='/create-form/:id' element={<AdminForm/>}/>
+      <Route path='/view/:id' element={<ViewPage/>}/>
     </Routes>
     </BrowserRouter>
     </>

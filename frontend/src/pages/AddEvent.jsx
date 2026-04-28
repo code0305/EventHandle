@@ -69,8 +69,12 @@ description: "",
     form.append("organizerEmail", eventData.organizerEmail);
     form.append("organizerPhone", eventData.organizerPhone);
 
-    form.append("amount", eventData.amount);
-    form.append("pmode", eventData.paymentmode);
+if (eventData.isPaid === "Yes") {
+  form.append("amount", eventData.amount);
+  form.append("pmode", eventData.paymentmode);
+} else {
+  form.append("amount", 0);
+}
 
     form.append("totalSeats", eventData.totalSeats);
 

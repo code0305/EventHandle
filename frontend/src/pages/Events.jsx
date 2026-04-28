@@ -40,16 +40,20 @@ const Events = ({ category,setChoice,setId }) => {
       </Typography>
       {
       data.map((event,index)=>(
+        
         <Card 
+        onClick={() => nav(`/view/${event._id}`)}
         sx={{
           p: 2,
           borderRadius: 1,
           boxShadow: 3,
           m:2
+          
         }}
         key={index}
       >
         <Box
+        
           sx={{
             display: "flex",
             alignItems: "center",
@@ -76,7 +80,7 @@ const Events = ({ category,setChoice,setId }) => {
             />
           </Box>
           <Box sx={{ flex: 1 }}>
-            <Typography variant="h6" fontWeight="bold">
+            <Typography variant="h6" fontWeight="bold" >
               {event?.title}
             </Typography>
 
@@ -122,7 +126,9 @@ const Events = ({ category,setChoice,setId }) => {
             </Box>
                 </>
               ):(<>
-            <Button variant="contained" sx={{mt:1,width:130,px:7}}>
+            <Button variant="contained" sx={{mt:1,width:130,px:7}} 
+        onClick={nav(`/view/${event._id}`)}
+        >
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Book</Typography>
             </Button>
               </>)
