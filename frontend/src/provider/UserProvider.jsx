@@ -75,7 +75,16 @@ const UserProvider = ({children}) => {
         }
     }
 
-    
+    const onboard = async (data) => {
+        try {
+            return await axios.post(`${BaseUrl}/auth/onboard`,data,{
+                headers:{
+                    "Content-Type":"multipart/form-data"
+                }})
+        } catch (error) {
+            throw error 
+        }
+    }
 
     const value ={
         authUser,
@@ -86,7 +95,8 @@ const UserProvider = ({children}) => {
         verifyToken,
         updatePassword,
         Info,
-        Logout
+        Logout,
+        onboard
     }
     return(
         <UserContext.Provider value={value}>

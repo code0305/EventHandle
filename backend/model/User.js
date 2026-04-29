@@ -14,7 +14,15 @@ const userSchema = new mongoose.Schema({
         required:true,
     },
     profilePic:{
-        type:String,
+            mediaType:{
+                type:String,
+            },
+            mediaUrl:{
+                type:String
+            },
+            publicId:{
+                type:String
+                },
     },
     language:{
         type:String,

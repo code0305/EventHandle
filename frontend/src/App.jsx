@@ -17,6 +17,7 @@ import { darkTheme } from './constants/constant';
 import Events from './pages/Events';
 import AdminForm from './components/AdminForm';
 import ViewPage from './components/ViewPage';
+import OnboardingPage from './pages/OnboardingPage';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
@@ -87,6 +88,7 @@ useEffect(() => {
     <Routes>
       <Route path='/signin' element={!authUser?<SignInPage/>:(<Navigate to="/"/>)}/>
       <Route path='/signup' element={<SignUpPage/>}/>
+      <Route path='/onboard' element={<OnboardingPage/>}/>
       <Route path='/forgot' element={<ForgotPassword/>}/>
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>

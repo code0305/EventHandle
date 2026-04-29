@@ -3,7 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import sendEmail from "../services/mailer.js";
 import { signUpTemplate, tokenTemplate } from "../ConstantPage/constantPages.js";
-
+import cloudinary from "../services/cloudinary.js";
+import fs from "fs"
 export const signin =async(req,res)=>{
     try {
     const{email,password}=req.body;
@@ -241,5 +242,44 @@ export const rating = async (req,res) => {
     } catch (error) {
         console.log("FeedBack Error :"+error.message);
         return res.status(400).json({success:false,message:error.message})
+    }
+}
+
+export const onboard = async(req,res)=>{
+    try {
+        const {fullName,state,phoneNumber,language}=req.body;
+        const id = req.user.id
+        let profilePic = null;
+        if(!fullName || !state || !phoneNumber || !language)
+        {
+            return res.status(400).json({success:false,message:"Fill all Fields"})
+        }
+
+        const ExistingUser = await User.findById(id)
+
+        if (!ExistingUser) {
+            return res.status(400).json({success:false,message:"User Not found"})
+        }
+
+        if (req.file) {
+      const result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "EventHandle"
+      });
+
+      profilePic= {
+        mediaType: req.file.mimetype.startsWith("image") ? "image" : "video",
+        mediaUrl: result.secure_url,
+        publicId: result.public_id
+      };
+
+      fs.unlinkSync(req.file.path);
+    }
+
+
+        const InfoUpdate = await User.findByIdAndUpdate(id,{fullName,state,phoneNumber,language,profilePic,isOnboarded:true},{ new: true });
+
+        res.status(200).json({success:true,message:"Successfully Onboarded",data:InfoUpdate})
+    } catch (error) {
+            return res.status(400).json({success:false,message:"Error in Onboard "+error.message})
     }
 }

@@ -18,7 +18,7 @@ const AddEvent = () => {
   const [activeStep, setActiveStep] = useState(0);
   const [media, setMedia] = useState([]);
   const [eventData, setEventData] = useState({
-description: "",
+    description: "",
     title: "",
     category: "",
     modeEvent: "",
