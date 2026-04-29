@@ -12,7 +12,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
-import { Button } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useState } from 'react';
@@ -145,8 +145,9 @@ export default function Navbar({setSearch,setAuthUser}) {
             borderBottom: "1px solid rgba(255,255,255,0.1)"
         }}
         >
+          <Container maxWidth="lg">
         <Toolbar sx={{display:"flex", alignItems: "center",justifyContent:"space-between"}}>
-          <Search sx={{width: {  sm: "300px", md: "400px"}}}>
+          <Search sx={{width: {  sm: "200px", md: "300px" , lg:"350px"}}}>
             <SearchIconWrapper>
               <SearchIcon />
             </SearchIconWrapper>
@@ -208,6 +209,7 @@ export default function Navbar({setSearch,setAuthUser}) {
             </IconButton>
           </Box>
         </Toolbar>
+        </Container>
       </AppBar>
       {renderMobileMenu}
     </Box>

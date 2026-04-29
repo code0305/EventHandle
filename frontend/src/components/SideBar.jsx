@@ -61,22 +61,22 @@ export const SideBar = ({authUser , active , setActive}) => {
               ))}
             </Box>
 
-          {/* Bottom Section */}
-          <Box>
-            <Box sx={{display:"flex" ,alignItems:"center", mb:3 }}>
-              {/* <Avatar
-                src={`http://localhost:5001/uploads/${authUser?.profilePic}`}
-                sx={{ width: 40, height: 40 }}
-              /> */}
-              <Typography
-                color="primary"
-                fontWeight="bold"
-                sx={{ ml: 2,mb:3 }}
-              >
-                {authUser?.fullName}
-              </Typography>
-            </Box>
-            </Box>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
+            <Avatar
+              src={authUser?.profilePic?.mediaUrl}
+              sx={{ width: 50, height: 80 }}
+            >
+              {!authUser?.profilePic?.mediaUrl &&
+                authUser?.fullName?.charAt(0)?.toUpperCase()}
+            </Avatar>
+
+            <Typography
+              color="primary"
+              fontWeight="bold"
+            >
+              {authUser?.fullName}
+            </Typography>
+          </Box>
           </Box>
         </Box>
       )}
@@ -84,7 +84,7 @@ export const SideBar = ({authUser , active , setActive}) => {
         <Box>
         <Box
           sx={{
-            width: 260,
+            width: { xs: 100,  sm: 110 ,md:120},
             height: "100vh",
             bgcolor: "#020617",
             borderRight: "1px solid rgba(255,255,255,0.1)",

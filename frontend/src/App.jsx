@@ -86,9 +86,9 @@ useEffect(() => {
             }}/>
     <BrowserRouter>
     <Routes>
-      <Route path='/signin' element={!authUser?<SignInPage/>:(<Navigate to="/"/>)}/>
-      <Route path='/signup' element={<SignUpPage/>}/>
-      <Route path='/onboard' element={<OnboardingPage/>}/>
+      <Route path='/signin' element={!authUser?<SignInPage/>:(authUser?.isOnboarded ?<Navigate to="/"/>:<OnboardingPage/>)}/>
+      <Route path='/signup' element={!authUser?<SignUpPage/>:<OnboardingPage/>}/>
+      <Route path='/onboard' element={authUser?.isOnboarded ?<Navigate to="/"/>:<OnboardingPage/>}/>
       <Route path='/forgot' element={<ForgotPassword/>}/>
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
