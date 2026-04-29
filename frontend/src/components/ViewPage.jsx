@@ -14,11 +14,15 @@ import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 import RadioButtonCheckedIcon from '@mui/icons-material/RadioButtonChecked';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import ConfirmBooking from "./Booking";
+import BookingDialog from "./Booking";
+import UserContext from "../context/UserContext";
 
 const ViewPage = () => {
 
   const nav =  useNavigate();
-  const { detailsById } = useContext(EventContext);
+  const { detailsById} = useContext(EventContext);
+  const {authUser}=useContext(UserContext);
   const { id } = useParams();
 
   const [event, setEvent] = useState({});
@@ -30,15 +34,14 @@ const ViewPage = () => {
   });
 
   const [status, setStatus] = useState("loading");
-
+  const [open, setOpen] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
+const fetchData = async () => {
       try {
         const res = await detailsById(id);
         if (res?.data?.success) {
           setEvent(res?.data?.data);
+          console.log(res?.data?.data)
         }
       } catch (error) {
         if (error.code === "ERR_NETWORK") {
@@ -48,6 +51,7 @@ const ViewPage = () => {
         }
       }
     };
+  useEffect(() => {
     fetchData();
   }, [id, detailsById]);
 
@@ -83,9 +87,6 @@ const ViewPage = () => {
   return () => clearInterval(interval);
 }, [event]);
 
-  const handleBookNow = () => {
-    toast.success("Proceed to booking!");
-  };
 
   return (
     <ThemeProvider theme={darkTheme}>
@@ -185,17 +186,37 @@ const ViewPage = () => {
                   }}
                 >
                   Secure your spot now before it's gone forever!
+                  {
+                    event.capacity.registered<20 && (
+                      <Typography
+                      variant="h6"
+                        sx={{
+                          color: "rgba(255,255,255,0.95)",
+                          mb: 4
+                        }}
+                      >
+                        <span style={{ color: 'red' }}>{totalSeats-registered}</span>seats available!
+                      </Typography>
+                    )
+                  }
                 </Typography>
-
+                <BookingDialog
+                  open={open}
+                  onClose={() => setOpen(false)}
+                  event={event}
+                  userId={authUser?._id}
+                  refreshEvent={fetchData}
+                />
                 <Button
                   variant="contained"
                   size="large"
-                  onClick={handleBookNow}
                   sx={{ px: 8, py: 2 }}
+                  onClick={() => setOpen(true)}
                 >
                   <Typography sx={{fontWeight:"bold"}}>BOOK  NOW</Typography>
-                  
+                
                 </Button>
+
               </Paper>
             </Fade>
           </Container>
@@ -312,7 +333,6 @@ const ViewPage = () => {
         width: "90%"
       }}
     >
-      {/* ✅ Icon */}
       <CheckCircleIcon
         sx={{
           fontSize: 80,
@@ -321,7 +341,6 @@ const ViewPage = () => {
         }}
       />
 
-      {/* 🎯 Title */}
       <Typography
         variant="h4"
         sx={{
@@ -333,7 +352,6 @@ const ViewPage = () => {
         Event Completed
       </Typography>
 
-      {/* 💬 Subtitle */}
       <Typography
         variant="body1"
         sx={{
@@ -344,7 +362,6 @@ const ViewPage = () => {
         Thank you for being part of this event.
       </Typography>
 
-      {/* 🔘 Button (optional) */}
       <Button
         variant="contained"
         sx={{

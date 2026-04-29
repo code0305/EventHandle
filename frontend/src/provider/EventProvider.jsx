@@ -75,6 +75,17 @@ const EventProvider =({children})=>{
             throw error;
         }
     };
+
+    const Book = async(data)=>{
+        
+        try {
+            const res = await axios.post(`${BaseUrl}/post/book`, data);
+            return res
+        } catch (error) {
+            throw error;
+        }
+    }
+
     
     const value ={
         addEvent,
@@ -83,7 +94,8 @@ const EventProvider =({children})=>{
         eventData,
         detailsById,
         updateEvent,
-        createForm
+        createForm,
+        Book
     }
     return(
         <EventContext.Provider value={value}>

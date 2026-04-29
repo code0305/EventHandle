@@ -93,7 +93,6 @@ useEffect(() => {
       <Route path='/forgot' element={<ForgotPassword/>}/>
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
-      {/* <Route path='/' element={authUser.isOnboarded ?<HomePage/>:(authUser.isOnboarded ?(<Navigate to="/onboard"/>):(<Navigate to='/signin'/>))}/> */}
         <Route path ='/' element={!authUser ? <Navigate to="/signin"/>:(authUser.isOnboarded ? <HomePage/> : (<Navigate to ="/onboard"/>))} />
       <Route path='/event' element={<Events/>}/>
       <Route path ='/create-form/:id' element={<AdminForm/>}/>

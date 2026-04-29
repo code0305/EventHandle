@@ -14,9 +14,9 @@ const bookingSchema = new mongoose.Schema({
 
   seatsBooked: {
     type: Number,
-    default: 0
+    required: true,
+    min: 1
   },
-
 
   bookingStatus: {
     type: String,

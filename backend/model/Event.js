@@ -47,10 +47,8 @@ const eventSchema = new mongoose.Schema({
       enum:["Online","On-spot"]
     }
   },
-  limit:Boolean,
   capacity: {
-    totalSeats: { type: Number, min: 0 },
-    registered: String
+    totalSeats: { type: Number, default: null }
   },
 
   status: {
