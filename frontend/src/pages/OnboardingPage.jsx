@@ -22,7 +22,7 @@ import toast from 'react-hot-toast';
 const OnboardingPage = () => {
 
   const nav = useNavigate();
-  const {onboard} = useContext(UserContext);
+  const {onboard,setAuthUser} = useContext(UserContext);
 
   const [formData, setFormData] = useState({
     fullName: '',
@@ -68,6 +68,7 @@ const OnboardingPage = () => {
     const res = await onboard(form);
     if(res?.data?.success)
     {
+      setAuthUser(res?.data?.data);
       toast.success(res?.data?.message)
       nav("/")
     }

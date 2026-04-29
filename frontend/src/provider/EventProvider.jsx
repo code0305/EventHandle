@@ -6,9 +6,9 @@ axios.defaults.withCredentials=true;
 const EventProvider =({children})=>{
 
     const BaseUrl = import.meta.env.VITE_SERVER
-    const addEvent =(data)=>{
+    const addEvent = async (data)=>{
         try {
-            const res = axios.post(`${BaseUrl}/post/create`,data,{
+            const res = await axios.post(`${BaseUrl}/post/create`,data,{
                 headers:{
                     "Content-Type":"multipart/form-data"
                 }

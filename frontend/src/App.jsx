@@ -86,13 +86,15 @@ useEffect(() => {
             }}/>
     <BrowserRouter>
     <Routes>
-      <Route path='/signin' element={!authUser?<SignInPage/>:(authUser?.isOnboarded ?<Navigate to="/"/>:<OnboardingPage/>)}/>
-      <Route path='/signup' element={!authUser?<SignUpPage/>:<OnboardingPage/>}/>
-      <Route path='/onboard' element={authUser?.isOnboarded ?<Navigate to="/"/>:<OnboardingPage/>}/>
+      <Route path='/signin' element={!authUser?<SignInPage/>:(authUser.isOnboarded ? (<Navigate to="/"/>):(<Navigate to="/onboard"/>))}/>
+      <Route path='/signup'element={!authUser ? (<SignUpPage />) : authUser.isOnboarded ? (<Navigate to="/" /> ) : (<Navigate to="/onboard" />)}/>
+      <Route path='/onboard' element={!authUser ? (
+      <Navigate to="/signin" />) : authUser.isOnboarded ? (<Navigate to="/" />) : (<OnboardingPage />)}/>
       <Route path='/forgot' element={<ForgotPassword/>}/>
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
-      <Route path='/' element={authUser?<HomePage/>:(<Navigate to='/signin'/>)}/>
+      {/* <Route path='/' element={authUser.isOnboarded ?<HomePage/>:(authUser.isOnboarded ?(<Navigate to="/onboard"/>):(<Navigate to='/signin'/>))}/> */}
+        <Route path ='/' element={!authUser ? <Navigate to="/signin"/>:(authUser.isOnboarded ? <HomePage/> : (<Navigate to ="/onboard"/>))} />
       <Route path='/event' element={<Events/>}/>
       <Route path ='/create-form/:id' element={<AdminForm/>}/>
       <Route path='/view/:id' element={<ViewPage/>}/>

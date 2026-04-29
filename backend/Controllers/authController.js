@@ -37,7 +37,7 @@ export const signin =async(req,res)=>{
     res.cookie("mycookie",token,{httpOnly:true,secure:false,samesite:'lax',maxAge:7*24*60*60*1000})
     existingUser.lastLogin = Date.now();
     await existingUser.save();
-     res.status(200).json({success:true ,message:"Sucessfully Logged In"});
+     res.status(200).json({success:true ,message:"Sucessfully Logged In",data:existingUser});
     } catch (error) {
     console.log("Error in SignIn Function");
     return res.status(400).json({success:false,message:"Error in SignIn Function"});
@@ -261,6 +261,9 @@ export const onboard = async(req,res)=>{
             return res.status(400).json({success:false,message:"User Not found"})
         }
 
+        if (!req.file) {
+    return res.status(400).json({success: false,message: "Image not uploaded"});
+  }
         if (req.file) {
       const result = await cloudinary.uploader.upload(req.file.path, {
         folder: "EventHandle"

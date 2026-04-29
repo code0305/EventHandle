@@ -31,6 +31,7 @@ const HomePage=()=>{
         try {
         const info = await Info();
         setAuthUser(info.data.data);
+        console.log(info.data.data)
         } catch (error) {
           if (error.code === "ERR_NETWORK") {
         toast.error("Server is down");

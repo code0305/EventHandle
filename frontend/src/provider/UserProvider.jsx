@@ -23,7 +23,7 @@ const UserProvider = ({children}) => {
     const handleLogin =async(data)=>{
         try {
             const res = await axios.post(`${BaseUrl}/auth/signin`,data);
-            setAuthUser(res?.data);
+            setAuthUser(res?.data?.data);
             return res;
         } catch (error) {
             throw error;
@@ -66,21 +66,24 @@ const UserProvider = ({children}) => {
     }, []);
 
     const Logout = async () => {
-        try {
-            const res = axios.post(`${BaseUrl}/auth/logout`)
-            setAuthUser(res?.data);
-            return res;
-        } catch (error) {
-            throw error;
-        }
-    }
+  try {
+    const res = await axios.post(`${BaseUrl}/auth/logout`);
+    setAuthUser(null);
+    return res;
+  } catch (error) {
+    throw error;
+  }
+};
 
     const onboard = async (data) => {
         try {
-            return await axios.post(`${BaseUrl}/auth/onboard`,data,{
+            
+            const res = await axios.post(`${BaseUrl}/auth/onboard`,data,{
                 headers:{
                     "Content-Type":"multipart/form-data"
                 }})
+            setAuthUser(res?.data?.data);
+            return res;
         } catch (error) {
             throw error 
         }
