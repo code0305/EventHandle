@@ -5,11 +5,14 @@ import { useContext } from 'react';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 import { darkTheme } from '../constants/constant';
+import { Load } from '../components/Load';
 
 const ForgotPassword = () => {
     const {forgotToken} = useContext(UserContext);
     const nav = useNavigate();
     const [email,setEmail] = useState("");
+
+    const[loading,setLoading]=useState(false);
 
     const Submit=async()=>{
         try {
@@ -17,6 +20,7 @@ const ForgotPassword = () => {
         toast.success(res?.data?.message);
         const help=res?.data?.identity;
         if (res?.data?.success) {
+        setLoading(true)
         setEmail("");
         nav(`/verify/${help}`);
         }
@@ -27,6 +31,14 @@ const ForgotPassword = () => {
         toast.error(error?.response?.data?.message);
       }
     }
+    finally{
+        setLoading(false)
+    }
+    }
+    if(loading)
+    {
+        return(<Load/>);
+        
     }
   return (
     <ThemeProvider theme={darkTheme}>

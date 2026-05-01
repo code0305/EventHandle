@@ -7,11 +7,13 @@ import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import { Load } from "../components/Load";
 
 
 
 export default function SignInPage() {
   const nav = useNavigate();
+  const [loading,setLoading]=useState(false)
   const {handleLogin} = useContext(UserContext);
   const [form,setForm]=useState({
     email:'',
@@ -24,6 +26,7 @@ export default function SignInPage() {
 
   const handleConfirm = async() =>{
     try {
+      setLoading(true);
       const res = await handleLogin(form);
       toast.success(res?.data?.message);
       if (res?.data?.success) {
@@ -39,8 +42,16 @@ export default function SignInPage() {
         toast.error(error?.response?.data?.message);
       }
     }
+    finally{
+      setLoading(false);
+    }
     
   }
+    if (loading) {
+      return (
+        <Load/>
+    );
+    }
 
   return (
     <ThemeProvider theme={darkTheme}>

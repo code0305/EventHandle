@@ -6,8 +6,10 @@ import EventContext from '../context/EventContext';
 import toast from 'react-hot-toast';
 import { red } from '@mui/material/colors';
 import { useNavigate } from 'react-router-dom';
+import { Load } from '../components/Load';
 
 const UpdatePage = ({ id,setchoice }) => {
+      const [loading,setLoading]=useState(false);
   
       const [eventData, setEventData] = useState({
       title: "",
@@ -34,35 +36,28 @@ const UpdatePage = ({ id,setchoice }) => {
       try {
         const formData = new FormData();
 
-        // Basic fields
         formData.append("title", eventData.title);
         formData.append("category", eventData.category);
         formData.append("description", eventData.description);
 
-        // Schedule
         formData.append("startDate", eventData.startDate);
         formData.append("endDate", eventData.endDate);
 
-        // Venue
         formData.append("modeEvent", eventData.modeEvent);
         formData.append("address", eventData.address);
         formData.append("city", eventData.city);
         formData.append("state", eventData.state);
         formData.append("connectionLink", eventData.connectionLink);
 
-        // Organizer
         formData.append("organizerName", eventData.organizerName);
         formData.append("organizerEmail", eventData.organizerEmail);
         formData.append("organizerPhone", eventData.organizerPhone);
 
-        // Pricing
         formData.append("pmode", eventData.pmode);
         formData.append("amount", eventData.amount);
 
-        // Capacity
         formData.append("totalSeats", eventData.totalSeats);
 
-        // Files (only if user uploads new ones)
 if (eventData.bannerFiles[0]) {
   formData.append("logo", eventData.bannerFiles[0]);
 }
@@ -88,6 +83,7 @@ if (eventData.bannerFiles[1]) {
     useEffect(()=>{
         const fetchData=async () => {
         try {
+        setLoading(true);
         const res = await detailsById(id);
         console.log(res?.data?.data)
         setEventData({
@@ -124,10 +120,20 @@ if (eventData.bannerFiles[1]) {
       } else {
         toast.error(error?.response?.data?.message);
       }
-    }
+
+    }finally{
+        setLoading(false);
+      }
   };
         fetchData();
     },[id])
+
+
+    if (loading) {
+        return (
+          <Load/>
+      );
+      }
 
   return (
     <>

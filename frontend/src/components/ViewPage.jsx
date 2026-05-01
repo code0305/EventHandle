@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CircularProgress,
   Container,
   Fade,
   Paper,
@@ -24,7 +25,7 @@ const ViewPage = () => {
   const { detailsById} = useContext(EventContext);
   const {authUser}=useContext(UserContext);
   const { id } = useParams();
-
+  const [loading,setLoading]= useState(false);
   const [event, setEvent] = useState({});
   const [countdown, setCountdown] = useState({
     days: 0,
@@ -38,6 +39,7 @@ const ViewPage = () => {
   const [isExpired, setIsExpired] = useState(false);
 const fetchData = async () => {
       try {
+        setLoading(true);
         const res = await detailsById(id);
         if (res?.data?.success) {
           setEvent(res?.data?.data);
@@ -49,6 +51,9 @@ const fetchData = async () => {
         } else {
           toast.error(error?.response?.data?.message);
         }
+      }
+      finally{
+        setLoading(false)
       }
     };
   useEffect(() => {
@@ -87,7 +92,28 @@ const fetchData = async () => {
   return () => clearInterval(interval);
 }, [event]);
 
-
+if (loading) {
+        return (
+          <ThemeProvider theme={darkTheme}>
+            <Box
+            sx={{
+              minHeight: "100vh",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              overflowY: "auto",
+              scrollbarWidth: "none",
+              "&::-webkit-scrollbar": {
+              background: "linear-gradient(135deg, #020617, #0f172a, #020617)",
+            },
+            background:"linear-gradient(135deg, #020617, #0f172a, #020617)"
+          }}
+          >
+            <CircularProgress sx={{ height:"50vh", }} aria-label="Loading…" />
+            </Box>
+          </ThemeProvider>
+      );
+      }
   return (
     <ThemeProvider theme={darkTheme}>
 

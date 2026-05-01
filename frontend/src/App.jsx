@@ -9,29 +9,29 @@ import UpdatePasswordPage from './pages/UpdatePasswordPage';
 import HomePage from './pages/HomePage';
 import { useEffect } from 'react';
 import { useContext } from 'react';
-import UserContext from './context/UserContext';
 import { useState } from 'react';
-import { Box, CircularProgress } from '@mui/material';
-import { ThemeProvider } from '@emotion/react';
-import { darkTheme } from './constants/constant';
 import Events from './pages/Events';
 import AdminForm from './components/AdminForm';
 import ViewPage from './components/ViewPage';
 import OnboardingPage from './pages/OnboardingPage';
+import UserContext from './context/UserContext';
+import { Load } from './components/Load';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
 useEffect(() => {
   const fetchData = async () => {
     try {
+      setLoading(true)
       await Info();
     } catch (error) {
       console.log(error.message);
-    } finally {
-      setLoading(false);
+    }
+    finally{
+      setLoading(false)
     }
   };
 
@@ -39,24 +39,7 @@ useEffect(() => {
 }, []);
   if (loading) {
     return (
-      <ThemeProvider theme={darkTheme}>
-        <Box
-        sx={{
-          minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          overflowY: "auto",
-          scrollbarWidth: "none", // Firefox
-          "&::-webkit-scrollbar": {
-          background: "linear-gradient(135deg, #020617, #0f172a, #020617)",
-        },
-        background:"linear-gradient(135deg, #020617, #0f172a, #020617)"
-      }}
-      >
-        <CircularProgress sx={{ height:"50vh", }} aria-label="Loading…" />
-        </Box>
-      </ThemeProvider>
+      <Load/>
   );
   }
 
@@ -93,7 +76,7 @@ useEffect(() => {
       <Route path='/forgot' element={<ForgotPassword/>}/>
       <Route path="/verify/:help" element={<VerifyCode/>}/>
       <Route path="/update-password/:help" element={<UpdatePasswordPage/>}/>
-        <Route path ='/' element={!authUser ? <Navigate to="/signin"/>:(authUser.isOnboarded ? <HomePage/> : (<Navigate to ="/onboard"/>))} />
+      <Route path ='/' element={!authUser ? <Navigate to="/signin"/>:(authUser.isOnboarded ? <HomePage/> : (<Navigate to ="/onboard"/>))} />
       <Route path='/event' element={<Events/>}/>
       <Route path ='/create-form/:id' element={<AdminForm/>}/>
       <Route path='/view/:id' element={<ViewPage/>}/>

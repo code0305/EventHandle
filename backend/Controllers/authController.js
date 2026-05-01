@@ -128,8 +128,13 @@ export const verification = async (req,res) => {
 
 export const UpdatePassword = async (req,res) => {
     try {
+        console.log(req.body);
     const{password,confirmPassword}= req.body;
+    if (!password || !confirmPassword) {
+  return res.status(400).json({success: false,message: "All fields are required"});
+}
     const help = req.params.help;
+
     const user = await User.findById(help);
     if(!user)
     {

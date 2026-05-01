@@ -14,19 +14,21 @@ export default function UpdatePasswordPage () {
     const {help} = useParams();
     const [data, setData] = useState({
        password:"",
-       confirmpassword:""
+       confirmPassword:""
     });
     const handleChange =(e)=>{
         setData({...data,[e.target.name]:e.target.value});
     }
+    const [loading,setLoading]=useState(false);
     const handleConfirm =async ()=>{
         try {
+          setLoading(true);
           const res = await updatePassword(data,help);
           toast.success(res?.data?.message);
           if (res?.data?.success) {
             setData({
                 password:"",
-                confirmpassword:""
+                confirmPassword:""
             })
             nav("/signin");
           }
@@ -36,6 +38,9 @@ export default function UpdatePasswordPage () {
       } else {
         toast.error(error?.response?.data?.message);
       }
+    }
+    finally{
+      setLoading(false);
     }
     }
   return (
@@ -82,8 +87,8 @@ export default function UpdatePasswordPage () {
           type="password"
           autoComplete="current-password"
           onChange={handleChange}
-          name='confirmpassword'
-          value={data.confirmpassword}
+          name='confirmPassword'
+          value={data.confirmPassword}
           sx={{mb:3}}
         />
         <Button onClick={handleConfirm}variant="contained" sx={{fontWeight:"bold",py:2} } fullWidth >Confirm</Button>

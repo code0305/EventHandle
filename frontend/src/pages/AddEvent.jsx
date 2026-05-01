@@ -5,6 +5,7 @@ import { images, darkTheme } from "../constants/constant";
 import { useContext } from "react";
 import EventContext from "../context/EventContext";
 import toast from "react-hot-toast";
+import { Load } from "../components/Load";
 
 const steps = [
   "Event Details",
@@ -14,6 +15,8 @@ const steps = [
 ];
 
 const AddEvent = () => {
+  
+  const [loading,setLoading]=useState(false)
   const {addEvent} = useContext(EventContext);
   const [activeStep, setActiveStep] = useState(0);
   const [media, setMedia] = useState([]);
@@ -51,6 +54,7 @@ const AddEvent = () => {
   };
 
   const handleSubmit = async () => {
+    setLoading(true)
     try {
     const form = new FormData();
 
@@ -117,6 +121,10 @@ setEventData({
       } else {
         toast.error(error?.response?.data?.message);
       }
+    }
+    finally
+    {
+      setLoading(false)
     }
   };
   const handleChange =(e)=>{
@@ -382,6 +390,11 @@ setEventData({
     }
   };
 
+  if (loading) {
+          return (
+            <Load/>
+        );
+    }
   return (
     <ThemeProvider theme={darkTheme}>
       <Box

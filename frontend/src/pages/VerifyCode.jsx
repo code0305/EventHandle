@@ -6,6 +6,7 @@ import { darkTheme } from '../constants/constant';
 import { useContext } from 'react';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
+import { Load } from '../components/Load';
 
 const VerifyCode = () => {
         
@@ -19,10 +20,10 @@ const VerifyCode = () => {
     };
   const combinedvalue = values.join("");
   const { help } = useParams(); 
+  const [loading,setLoading]=useState(false);
   const Accept = async()=>{
     try {
-        console.log(combinedvalue);
-        console.log(help);
+      setLoading(true)
         const res = await verifyToken({combinedvalue,help})
         toast.success(res?.data?.message)
     if (res?.data?.success) {
@@ -36,8 +37,16 @@ const VerifyCode = () => {
         toast.error(error?.response?.data?.message);
       }
     }
+    finally{
+      setLoading(false);
+    }
   }
-  
+  if(loading)
+  {
+    return(
+      <Load/>
+    )
+  }
   return (
     <ThemeProvider theme={darkTheme}>
         <Box
