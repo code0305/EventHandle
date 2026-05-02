@@ -15,12 +15,12 @@ const ForgotPassword = () => {
     const[loading,setLoading]=useState(false);
 
     const Submit=async()=>{
+        setLoading(true);
         try {
         const res = await forgotToken(email);
         toast.success(res?.data?.message);
         const help=res?.data?.identity;
         if (res?.data?.success) {
-        setLoading(true)
         setEmail("");
         nav(`/verify/${help}`);
         }

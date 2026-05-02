@@ -1,5 +1,5 @@
 import { Box, Button, Paper, TextField, ThemeProvider, Typography } from '@mui/material'
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import { darkTheme } from '../constants/constant';
@@ -13,11 +13,26 @@ const VerifyCode = () => {
     const {verifyToken}=useContext(UserContext);
     const nav = useNavigate();
     const [values, setValues] = useState(["", "", "", "", ""]);
+    const inputRefs = useRef([]);
+
     const handleChange = (index, e) => {
-        const newValues = [...values];
-        newValues[index] = e.target.value;
-        setValues(newValues);
+      const value = e.target.value;
+      if (!/^\d?$/.test(value)) return;
+
+      values[index] = e.target.value;
+      setValues(values);
+
+        if (value && index < values.length - 1) {
+          inputRefs.current[index + 1].focus();
+        }
     };
+    const handleKeyDown = (index, e) => {
+  if (e.key === "Backspace" && !values[index] && index > 0) {
+    inputRefs.current[index - 1].focus();
+  }
+};
+
+
   const combinedvalue = values.join("");
   const { help } = useParams(); 
   const [loading,setLoading]=useState(false);
@@ -76,16 +91,22 @@ const VerifyCode = () => {
                 textAlign:"center",
             }}>Verification Code</Typography>
             
-            <Box sx={{ display: "flex", gap: "10px" }}>
-        {values.map((val, i) => (
-          <TextField
-            key={i}
-            sx={{ width: "150px"}}
-            value={val}
-            onChange={(e) => handleChange(i, e)}
-          />
-        ))}
-      </Box>
+<Box sx={{ display: "flex", gap: "10px" }}>
+  {values.map((val, i) => (
+    <TextField
+      key={i}
+      inputRef={(el) => (inputRefs.current[i] = el)}
+      value={val}
+      onChange={(e) => handleChange(i, e)}
+      onKeyDown={(e) => handleKeyDown(i, e)}
+      inputProps={{
+        maxLength: 1,
+        style: { textAlign: "center", fontSize: "20px" }
+      }}
+      sx={{ width: "60px" }}
+    />
+  ))}
+</Box>
       
       <Button
              fullWidth

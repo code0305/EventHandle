@@ -125,7 +125,6 @@ export default function SignUpPage(){
               fullWidth
               variant="outlined"
               onClick={() => nav("/signin")}
-              startIcon={<img src={GoogleIcon} alt="Google Icon" width="20" height="20" />}
               
             >
               Sign in with Google

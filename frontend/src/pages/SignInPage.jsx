@@ -1,7 +1,7 @@
 
 import { Box, Button, Checkbox, FormControlLabel, TextField, Typography, Paper } from "@mui/material";
 import { ThemeProvider} from "@mui/material/styles";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { darkTheme } from "../constants/constant";
 import { useContext } from "react";
 import UserContext from "../context/UserContext";
@@ -13,6 +13,7 @@ import { Load } from "../components/Load";
 
 export default function SignInPage() {
   const nav = useNavigate();
+  const passwordRef = useRef(null);
   const [loading,setLoading]=useState(false)
   const {handleLogin} = useContext(UserContext);
   const [form,setForm]=useState({
@@ -89,6 +90,12 @@ export default function SignInPage() {
             onChange={handleChange}
             name="email"
             value={form.email}
+            onKeyDown={(e)=>{
+              if(e.key ==="Enter")
+              {
+                passwordRef.current.focus();
+              }
+            }}
           />
           <TextField
             fullWidth
@@ -98,7 +105,14 @@ export default function SignInPage() {
             autoComplete="current-password"
             onChange={handleChange}
             name="password"
+            inputRef={passwordRef}
             value={form.password}
+            onKeyDown={(e)=>{
+              if(e.key==="Enter")
+              {
+                handleConfirm();
+              }
+            }}
           />
 
          <Box sx={{display: "flex",justifyContent: "space-between",alignItems: "center",mt: 2,width: "100%",}}>

@@ -23,7 +23,7 @@ const OnboardingPage = () => {
 
   const nav = useNavigate();
   const {onboard,setAuthUser} = useContext(UserContext);
-
+  const[loading,setLoading]=useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     profilePic: null,
@@ -58,6 +58,7 @@ const OnboardingPage = () => {
   
   const handleSubmit = async (e) => {
     try {
+      setLoading(true)
     e.preventDefault();
     const form = new FormData();
     form.append("fullName", formData.fullName);
@@ -74,6 +75,9 @@ const OnboardingPage = () => {
     }
     } catch (error) {
       toast.error(error?.response?.data?.message);
+    }
+    finally{
+      setLoading(true)
     }
 
   };

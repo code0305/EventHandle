@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import {Box,ThemeProvider,Stepper,Step,StepLabel,Button,Typography,TextField,MenuItem,Paper, Select, InputLabel} from "@mui/material";
 
 import { images, darkTheme } from "../constants/constant";
@@ -20,6 +20,14 @@ const AddEvent = () => {
   const {addEvent} = useContext(EventContext);
   const [activeStep, setActiveStep] = useState(0);
   const [media, setMedia] = useState([]);
+  const cursor = useRef([]);
+  const handleEnter =(e,i)=>{
+    if(e.key==="Enter")
+    {
+    e.preventDefault();
+    cursor.current[i]?.focus()
+    }
+  }
   const [eventData, setEventData] = useState({
     description: "",
     title: "",
@@ -141,9 +149,16 @@ setEventData({
         name="title"
         value={eventData.title}
         fullWidth
+        inputRef={(el)=>(cursor.current[0]=el)}
+        onKeyDown={(e)=>{
+            handleEnter(e,1)
+        }}
         sx={{mt:1}}/>
 
-      <TextField label="Description" name="description" multiline rows={3} value={eventData.description}onChange={handleChange} fullWidth sx={{mt:1}} />
+      <TextField label="Description" name="description" multiline rows={3} value={eventData.description}onChange={handleChange}
+       inputRef={(el)=>(cursor.current[1]=el)}
+        onKeyDown={(e)=>{handleEnter(e,2)}}
+        fullWidth sx={{mt:1}} />
         <TextField
         select
         name="category"
@@ -156,6 +171,7 @@ setEventData({
         {images.map((item) => (
           <MenuItem key={item.name} value={item.name}>{item.name}</MenuItem>
         ))}
+        
       </TextField>
             <TextField
               label="Organizer Name"
@@ -163,6 +179,8 @@ setEventData({
               name="organizerName"
               onChange={handleChange}
               sx={{mt:1}}
+              inputRef={(el)=>(cursor.current[3]=el)}
+              onKeyDown={(e)=>handleEnter(e,4)}
               fullWidth
             />
 
@@ -171,6 +189,8 @@ setEventData({
               value={eventData.organizerEmail}
               name="organizerEmail"
               onChange={handleChange}
+              inputRef={(el)=>(cursor.current[4]=el)}
+              onKeyDown={(e)=>handleEnter(e,5)}
               sx={{mt:1}}
               fullWidth
             />
@@ -179,6 +199,8 @@ setEventData({
               value={eventData.organizerPhone}
               name="organizerPhone"
               onChange={handleChange}
+              inputRef={(el)=>(cursor.current[5]=el)}
+              onKeyDown={(e)=>handleEnter(e,6)}
               sx={{mt:1}}
               fullWidth
             />
@@ -247,7 +269,8 @@ setEventData({
       case 1:
         return (
           <Box sx={{display:"flex",flexDirection:"column" ,gap:2}}>
-       <TextField select label="Event Type" name="modeEvent" fullWidth  onChange={handleChange} value={eventData.modeEvent}>
+       <TextField select label="Event Type" name="modeEvent" fullWidth  onChange={handleChange} value={eventData.modeEvent}
+       >
        {["Online","Offline","Hybrid"].map((item) => (
           <MenuItem key={item} value={item}>{item}</MenuItem>
         ))}
@@ -259,21 +282,34 @@ setEventData({
 
       {eventData.modeEvent === "Offline" && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}/>
-          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city} />
-          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} />
+          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}
+          inputRef={(el)=>(cursor.current[6]=el)}
+              onKeyDown={(e)=>handleEnter(e,7)}
+              />
+          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city}
+          inputRef={(el)=>(cursor.current[7]=el)}
+              onKeyDown={(e)=>handleEnter(e,8)} />
+          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state}
+          inputRef={(el)=>(cursor.current[8]=el)}
+              onKeyDown={(e)=>handleEnter(e,9)} />
         </Box>
       )}
 
       {eventData.modeEvent === "Hybrid" && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField label="Meeting Link" name="connectionLink" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.connectionLink} />
-          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address} />
-          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city} />
-          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} />
+          <TextField label="Meeting Link" name="connectionLink" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.connectionLink} onKeyDown={(e)=>handleEnter(e,6)} />
+          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}
+          inputRef={(el)=>(cursor.current[6]=el)}
+              onKeyDown={(e)=>handleEnter(e,7)} />
+          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city} 
+          inputRef={(el)=>(cursor.current[7]=el)}
+              onKeyDown={(e)=>handleEnter(e,8)}/>
+          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} 
+          inputRef={(el)=>(cursor.current[8]=el)}
+              // onKeyDown={(e)=>handleEnter(e,9)}
+              />
         </Box>
       )}
-
       <TextField
       type="date"
       label="Start Date"

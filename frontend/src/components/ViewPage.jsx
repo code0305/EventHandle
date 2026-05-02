@@ -18,6 +18,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import ConfirmBooking from "./Booking";
 import BookingDialog from "./Booking";
 import UserContext from "../context/UserContext";
+import { Load } from "./Load";
 
 const ViewPage = () => {
 
@@ -94,24 +95,7 @@ const fetchData = async () => {
 
 if (loading) {
         return (
-          <ThemeProvider theme={darkTheme}>
-            <Box
-            sx={{
-              minHeight: "100vh",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              overflowY: "auto",
-              scrollbarWidth: "none",
-              "&::-webkit-scrollbar": {
-              background: "linear-gradient(135deg, #020617, #0f172a, #020617)",
-            },
-            background:"linear-gradient(135deg, #020617, #0f172a, #020617)"
-          }}
-          >
-            <CircularProgress sx={{ height:"50vh", }} aria-label="Loading…" />
-            </Box>
-          </ThemeProvider>
+          <Load/>
       );
       }
   return (
