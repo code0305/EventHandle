@@ -451,3 +451,16 @@ export const createBooking = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const fetechBookedUsers = async (req, res) => {
+  try {
+    const { eventId } = req.params;
+
+    const bookings = await Book.find({ event: eventId })
+      .populate("user", "fullName email");
+
+    res.status(200).json({success:true,message: "Feteched Users",bookings});
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching bookings" });
+  }
+}

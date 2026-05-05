@@ -86,6 +86,13 @@ const EventProvider =({children})=>{
         }
     }
 
+    const fetchRegistered = async(id)=>{
+        try {
+            return await axios.get(`${BaseUrl}/post/bookings/${id}`);
+        } catch (error) {
+            throw error;
+        }
+    }
     
     const value ={
         addEvent,
@@ -95,7 +102,8 @@ const EventProvider =({children})=>{
         detailsById,
         updateEvent,
         createForm,
-        Book
+        Book,
+        fetchRegistered
     }
     return(
         <EventContext.Provider value={value}>

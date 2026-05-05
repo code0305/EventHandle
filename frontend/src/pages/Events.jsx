@@ -130,8 +130,11 @@ const filteredData = data.filter((event) => {
             <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={()=>nav(`/create-form/${event?._id}`)}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
             </Button>
-            <Button variant="contained" sx={{mt:1,width:70,px:7}}>
-              <Typography variant="h7" sx={{fontWeight:"bold"}}>Report</Typography>
+            <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={() => {
+              setId(event?._id);
+              setChoice("Booked");
+            }}>
+              <Typography variant="h7" sx={{fontWeight:"bold"}}>Booked</Typography>
             </Button>
             
             </Box>

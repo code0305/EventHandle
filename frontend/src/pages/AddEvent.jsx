@@ -310,7 +310,7 @@ setEventData({
               />
         </Box>
       )}
-      <TextField
+      <TextField 
       type="date"
       label="Start Date"
       fullWidth

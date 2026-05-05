@@ -12,6 +12,7 @@ import Orders from "./Orders";
 import StarLayout from "../components/StarLayout";
 import Events from "./Events";
 import UpdatePage from "./UpdatePage";
+import BookedUsers from "./BookedUsers";
 
 const HomePage=()=>{
     
@@ -56,7 +57,10 @@ const HomePage=()=>{
       case "Events":
                     return <Events category={selectedCategory}  setId={setID} setChoice={setChoice} search={search} />;
                     break;
-      case "Update": return <UpdatePage id={id} setchoice={setChoice}/>;
+
+      case "Booked": return<BookedUsers id={id} setChoice={setChoice}/>
+                    break;            
+      case "Update": return <UpdatePage id={id}/>;
                     break;
 
       default: return <div>Welcome</div>;

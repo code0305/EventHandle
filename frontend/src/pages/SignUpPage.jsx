@@ -127,7 +127,7 @@ export default function SignUpPage(){
               onClick={() => nav("/signin")}
               
             >
-              Sign in with Google
+              Sign in
             </Button>
             </Box>
         </Paper>
