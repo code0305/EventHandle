@@ -34,6 +34,8 @@ const UpdatePage = ({ id,setchoice }) => {
 
     const handleUpdate = async () => {
       try {
+        
+        setLoading(true);
         const formData = new FormData();
 
         formData.append("title", eventData.title);
@@ -71,6 +73,9 @@ if (eventData.bannerFiles[1]) {
         setchoice("Events");
       } catch (error) {
         toast.error(error?.response?.data?.message);
+      }
+      finally{
+        setLoading(false);
       }
     };
 

@@ -5,6 +5,10 @@ const feebackFormSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Event"
     },
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"User"
+    },
     questions:[{
         questionId:{
             type:String,
@@ -19,5 +23,9 @@ const feebackFormSchema = new mongoose.Schema({
     }
     ]
 },{timestamps:true});
-
+// only for one person
+feebackFormSchema.index(
+  { eventId: 1, userId: 1 },
+  { unique: true }
+);
 export const Form = mongoose.model("Form",feebackFormSchema);

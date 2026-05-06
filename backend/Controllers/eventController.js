@@ -4,8 +4,10 @@ import cloudinary from "../services/cloudinary.js";
 import fs from "fs";
 import { updateEventStatuses } from "../util/updateStatus.js";
 import { Book } from "../model/Booking.js";
+import { Response } from "../model/ResponseForm.js";
 
 
+// Events
 export const AddEvent =async(req,res) => {
  try {
     const data = req.body;
@@ -73,21 +75,6 @@ if (
   }
 }
 
-export const getAllEvents = async (req,res) => {
-  try {
-    const data = await Event.find();
-    if(!data)
-    {
-          return res.status(400).json({success:false,message:"Data is Empty"})
-    }
-    res.status(200).json({success:true,message:"Event Data",data:data})
-  } catch (error) {
-      return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
-  }
-}
-
-
-
 export const DeleteEvent = async(req,res)=>{
   try {
     const id= req.params.id;
@@ -101,82 +88,6 @@ export const DeleteEvent = async(req,res)=>{
           return res.status(500).json({success:false,message:"Error while Deleting : "+error.message});
   }
 }
-
-
-
-
-export const getBycategory = async (req,res) => {
-  try {
-    const category = req.params.category;
-    await updateEventStatuses();
-    const data = await Event.find({category: category});
-    if(!data)
-    {
-          return res.status(200).json({success:true,message:"Data is Empty"})
-    }
-    
-    res.status(200).json({success:true,message:"Event Data",data:data})
-  } catch (error) {
-      return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
-  }
-}
-
-
-
-
-export const EventByID = async (req, res) => {
-  try {
-    const id = req.params.id;
-
-    const event = await Event.findById(id);
-
-    if (!event) {
-      return res.status(400).json({
-        success: false,
-        message: "Event Data Not Found"
-      });
-    }
-
-    // 🧠 STEP 1: get bookings
-    const bookings = await Book.find({
-      event: id,
-      bookingStatus: "Confirmed"
-    });
-
-    // 🧠 STEP 2: calculate booked seats
-    const bookedSeats = bookings.reduce(
-      (acc, b) => acc + b.seatsBooked,
-      0
-    );
-
-    // 🧠 STEP 3: calculate available seats
-    const totalSeats = event.capacity.totalSeats;
-
-    const availableSeats =
-      totalSeats === null
-        ? null
-        : totalSeats - bookedSeats;
-
-    // ✅ FINAL RESPONSE
-    res.status(200).json({
-      success: true,
-      message: "Event Data",
-      data: {
-        ...event.toObject(),
-        availableSeats
-      }
-    });
-
-  } catch (error) {
-    return res.status(400).json({
-      success: false,
-      message: "Error while fetching event: " + error.message
-    });
-  }
-}
-
-
-
 
 export const updateEvent = async (req, res) => {
     try {
@@ -264,6 +175,83 @@ export const updateEvent = async (req, res) => {
     }
 }
 
+export const getBycategory = async (req,res) => {
+  try {
+    const category = req.params.category;
+    await updateEventStatuses();
+    const data = await Event.find({category: category});
+    if(!data)
+    {
+          return res.status(200).json({success:true,message:"Data is Empty"})
+    }
+    
+    res.status(200).json({success:true,message:"Event Data",data:data})
+  } catch (error) {
+      return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
+  }
+}
+
+export const getAllEvents = async (req,res) => {
+  try {
+    const data = await Event.find();
+    if(!data)
+    {
+          return res.status(400).json({success:false,message:"Data is Empty"})
+    }
+    res.status(200).json({success:true,message:"Event Data",data:data})
+  } catch (error) {
+      return res.status(400).json({success:false,message:"Data is Empty: "+error.message});
+  }
+}
+
+export const EventByID = async (req, res) => {
+  try {
+    const id = req.params.id;
+
+    const event = await Event.findById(id);
+
+    if (!event) {
+      return res.status(400).json({
+        success: false,
+        message: "Event Data Not Found"
+      });
+    }
+
+    const bookings = await Book.find({
+      event: id,
+      bookingStatus: "Confirmed"
+    });
+
+    const bookedSeats = bookings.reduce(
+      (acc, b) => acc + b.seatsBooked,
+      0
+    );
+
+    const totalSeats = event.capacity.totalSeats;
+
+    const availableSeats =
+      totalSeats === null
+        ? null
+        : totalSeats - bookedSeats;
+
+    res.status(200).json({
+      success: true,
+      message: "Event Data",
+      data: {
+        ...event.toObject(),
+        availableSeats
+      }
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Error while fetching event: " + error.message
+    });
+  }
+}
+
+// Feedback
 
 export const createFeedbackForm = async (req, res) => {
   try {
@@ -298,7 +286,6 @@ export const getFeedbackForm = async (req, res) => {
     res.status(500).json({ success: false, message: "Get Feedback Form error " + error.message });
   }
 };
-
 
 export const submitFeedback = async (req, res) => {
   try {
@@ -344,21 +331,32 @@ export const submitFeedback = async (req, res) => {
       }
     }
 
-    const feedback = await FeedbackResponse.findOneAndUpdate(
-      { eventId, userId },
-      { responses },
-      { new: true }
+    const feedback = await Response.create(
+      { eventId, userId ,responses}
     );
 
     return res.status(200).json({success: true,message: "Feedback submitted successfully",data: feedback});
 
   } catch (error) {
-    console.log(error);
-
     return res.status(500).json({success: false,message: "Update Feedback error"});
   }
 };
 
+
+export const getUserResponse = async (req,res) => {
+  try {
+    const {id} = req.params
+    const response = await Response.findOne({eventId:id,userId:req.user.id})
+    if(!response)
+    {
+      return res.status(200).json({success:false,message:"No feedback"})
+    }
+    res.status(200).json({success:true,message:'Feedback Submitted'});
+  } catch (error) {
+       res.status(400).json({success:false,message:"Error in UserResponse "+error.message})
+
+  }
+}
 
 export const getAllResponses = async (req, res) => {
   try {
@@ -373,40 +371,8 @@ export const getAllResponses = async (req, res) => {
   }
 };
 
+// Booking
 
-
-export const getEventById = async (req, res) => {
-  try {
-    const event = await Event.findById(req.params.id);
-
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
-
-    const bookings = await Book.find({
-      event: event._id,
-      bookingStatus: "Confirmed"
-    });
-
-    const bookedSeats = bookings.reduce(
-      (acc, b) => acc + b.seatsBooked,
-      0
-    );
-
-    const totalSeats = event.capacity.totalSeats;
-
-    const availableSeats =
-      totalSeats === null ? null : totalSeats - bookedSeats;
-
-    res.json({
-      ...event.toObject(),
-      availableSeats
-    });
-
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-};
 
 export const createBooking = async (req, res) => {
   try {

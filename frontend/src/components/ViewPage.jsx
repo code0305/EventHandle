@@ -1,10 +1,16 @@
 import {
   Box,
   Button,
+  Card,
   CircularProgress,
   Container,
   Fade,
+  FormControl,
+  FormControlLabel,
   Paper,
+  Radio,
+  RadioGroup,
+  TextField,
   ThemeProvider,
   Typography
 } from "@mui/material";
@@ -23,7 +29,7 @@ import { Load } from "./Load";
 const ViewPage = () => {
 
   const nav =  useNavigate();
-  const { detailsById} = useContext(EventContext);
+  const { detailsById,SubmitFeedback,getForm,UserResponse} = useContext(EventContext);
   const {authUser}=useContext(UserContext);
   const { id } = useParams();
   const [loading,setLoading]= useState(false);
@@ -34,17 +40,32 @@ const ViewPage = () => {
     minutes: 0,
     seconds: 0
   });
-
+  const [formData, setFormData] = useState(null);
+  const [showFeedback, setShowFeedback] = useState(false);
   const [status, setStatus] = useState("loading");
   const [open, setOpen] = useState(false);
   const [isExpired, setIsExpired] = useState(false);
+
+      const fieldStyle = {
+  "& .MuiInputBase-root": {
+    color: "white",
+    fontSize: "16px",
+    borderRadius: "10px"
+  },
+  "& .MuiOutlinedInput-root": {
+    "&:hover fieldset": {
+      borderColor: "#06b6e2"
+    }
+  }
+};
+
 const fetchData = async () => {
       try {
         setLoading(true);
         const res = await detailsById(id);
         if (res?.data?.success) {
           setEvent(res?.data?.data);
-          console.log(res?.data?.data)
+          console.log(res?.data?.data);
         }
       } catch (error) {
         if (error.code === "ERR_NETWORK") {
@@ -57,9 +78,172 @@ const fetchData = async () => {
         setLoading(false)
       }
     };
+
+const loadFeedbackFlow = async () => {
+  try {
+
+    const check = await UserResponse(id);
+    console.log(check)
+    if (check.success) {
+      setShowFeedback(false);
+      return;
+    }
+    const formRes = await getForm(id)
+    if (!formRes?.success) {
+      setShowFeedback(false); 
+      return;
+    }
+    setShowFeedback(true);
+    setFormData(formRes.data);
+    
+
+  } catch (err) {
+    console.log(err);
+  }
+};
+
+
+const FeedbackForm = ({ form, onSubmit }) => {
+  const [answers, setAnswers] = useState({});
+
+  const handleChange = (id, value) => {
+    setAnswers((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleSubmit = async () => {
+    if (Object.keys(answers).length !== form.questions.length) {
+      toast.error("Please answer all questions");
+      return;
+    }
+
+  const formatted = Object.keys(answers).map((key) => ({
+    questionId: key,
+    answer: answers[key]
+  }));
+
+  const data = {
+    eventId: form.eventId,
+    responses: formatted
+  }
+
+  SubmitFeedback(data);
+
+  onSubmit();
+};
+
+  return (
+  <Paper
+    sx={{
+      p: 4,
+      minHeight: "100vh",
+      background: "linear-gradient(135deg, #0f172a, #020617)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}
+  >
+    <Card
+      sx={{
+        width: "100%",
+        maxWidth: 600,
+        p: 4,
+        borderRadius: 4,
+        display: "flex",
+        flexDirection: "column",
+        gap: 3,
+        background: "rgba(255,255,255,0.05)",
+        backdropFilter: "blur(10px)"
+      }}
+    >
+      <Typography
+        variant="h4"
+        sx={{ textAlign: "center", fontWeight: "bold", color: "white" }}
+      >
+        Feedback Form
+      </Typography>
+
+      {form?.questions?.map((q) => (
+        <Box key={q?.questionId} sx={{ width: "100%" }}>
+          
+          <Typography
+            sx={{
+              mb: 1,
+              color: "rgba(255,255,255,0.9)",
+              fontWeight: 500
+            }}
+          >
+            {q.question}
+          </Typography>
+
+          {q?.type?.toLowerCase() === "text" && (
+            <TextField
+              fullWidth
+              size="medium"
+              sx={fieldStyle}
+              onChange={(e) =>
+                handleChange(q?.questionId, e.target.value)
+              }
+            />
+          )}
+
+          {q?.type?.toLowerCase() === "multiline" && (
+            <TextField
+              fullWidth
+              multiline
+              rows={5}
+              sx={fieldStyle}
+              onChange={(e) =>
+                handleChange(q?.questionId, e.target.value)
+              }
+            />
+          )}
+
+          {q?.type?.toLowerCase() === "rating" && (
+  <FormControl sx={{ mt: 1 }}>
+    <RadioGroup
+      row
+      onChange={(e) =>
+        handleChange(q?.questionId, e.target.value)
+      }
+    >
+      <FormControlLabel value="1" control={<Radio />} label=" Bad" />
+      <FormControlLabel value="2" control={<Radio />} label=" Okay" />
+      <FormControlLabel value="3" control={<Radio />} label=" Good" />
+      <FormControlLabel value="4" control={<Radio />} label=" Very Good" />
+      <FormControlLabel value="5" control={<Radio />} label=" Best" />
+    </RadioGroup>
+  </FormControl>
+)}
+        </Box>
+      ))}
+
+      <Button
+        variant="contained"
+        size="large"
+        onClick={handleSubmit}
+        sx={{
+          mt: 2,
+          py: 1.5,
+          fontWeight: "bold",
+          borderRadius: "30px",
+          background: "linear-gradient(135deg, #22c55e, #16a34a)"
+        }}
+      >
+        Submit Feedback
+      </Button>
+    </Card>
+  </Paper>
+);
+};
+
+
+
   useEffect(() => {
     fetchData();
-  }, [id, detailsById]);
+    loadFeedbackFlow();
+  }, [id]);
+
+
 
   useEffect(() => {
   if (!event?.schedule?.startDate || !event?.schedule?.endDate) return;
@@ -93,11 +277,16 @@ const fetchData = async () => {
   return () => clearInterval(interval);
 }, [event]);
 
+
+
 if (loading) {
         return (
           <Load/>
       );
       }
+
+
+
   return (
     <ThemeProvider theme={darkTheme}>
 
@@ -205,7 +394,7 @@ if (loading) {
                           mb: 4
                         }}
                       >
-                        <span style={{ color: 'red' }}>{totalSeats-registered}</span>seats available!
+                        <span style={{ color: 'red' }}>{event?.capacity?.total - event?.capacity?.registered}</span>seats available!
                       </Typography>
                     )
                   }
@@ -322,6 +511,17 @@ if (loading) {
 )}
 
         {status === "completed" && (
+          <>
+          {showFeedback ? (
+      <FeedbackForm
+        form={formData}
+        onSubmit={() => {
+          setShowFeedback(false);
+        }}
+      />
+      
+    ) : (
+      
   <Box
     sx={{
       height: "100vh",
@@ -386,8 +586,9 @@ if (loading) {
       </Button>
     </Box>
   </Box>
-)}
-
+      )}
+      </>
+      )}
       </Box>
     </ThemeProvider>
   );

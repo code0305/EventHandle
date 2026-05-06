@@ -93,7 +93,35 @@ const EventProvider =({children})=>{
             throw error;
         }
     }
+
     
+
+    const getForm =async (data) => {
+        try {
+            const res = await axios.get(`${BaseUrl}/post/form/${data}`);
+            return res.data
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
+    const SubmitFeedback =async (data) => {
+        try {
+            return await axios.post(`${BaseUrl}/post/submit`,data)
+        } catch (error) {
+            throw error
+        }
+    }
+
+    const UserResponse = async (data) => {
+        try {
+            const res = await axios.get(`${BaseUrl}/post/response/${data}`)
+            return res.data
+        } catch (error) {
+            throw error;
+        }
+    }
     const value ={
         addEvent,
         allEvents,
@@ -103,7 +131,11 @@ const EventProvider =({children})=>{
         updateEvent,
         createForm,
         Book,
-        fetchRegistered
+        fetchRegistered,
+        SubmitFeedback,
+        getForm,
+        UserResponse
+         
     }
     return(
         <EventContext.Provider value={value}>
