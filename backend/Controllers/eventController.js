@@ -1,10 +1,14 @@
 import { Event } from "../model/Event.js";
 import { Form } from "../model/FeedbackForm.js";
 import cloudinary from "../services/cloudinary.js";
+import PDFDocument from "pdfkit";
+import QRCode from "qrcode";
 import fs from "fs";
 import { updateEventStatuses } from "../util/updateStatus.js";
 import { Book } from "../model/Booking.js";
 import { Response } from "../model/ResponseForm.js";
+import { Ticket } from "../ConstantPage/constantPages.js";
+import sendEmail from "../services/mailer.js";
 
 
 // Events
@@ -374,48 +378,55 @@ export const getAllResponses = async (req, res) => {
 // Booking
 
 
-export const createBooking = async (req, res) => {
-  try {
-    const { eventId, userId, seats } = req.body;
 
-    const event = await Event.findById(eventId);
+export const createBooking = async (req, res) => { 
+      try { 
+        const { eventId, userId, seats } = req.body; 
 
-    if (!event) {
-      return res.status(404).json({ message: "Event not found" });
-    }
+        const user = req.user; const event = await Event.findById(eventId); 
 
-    const bookings = await Book.find({
-      event: eventId,
-      bookingStatus: "Confirmed"
-    });
+        if (!event) 
+          { return res.status(404).json({ success: false, message: "Event not found" }); } 
 
-    const bookedSeats = bookings.reduce(
-      (acc, b) => acc + b.seatsBooked,
-      0
-    );
-
-    const totalSeats = event.capacity.totalSeats;
-
-    if (totalSeats !== null && seats > (totalSeats - bookedSeats)) {
-      return res.status(400).json({
-        message: "Not enough seats available"
-      });
-    }
-
-    const booking = await Book.create({
-      event: eventId,
-      user: userId,
-      seatsBooked: seats
-    });
-
-    res.json({
-      message: "Booking successful",
-      booking
-    });
+        const bookings = await Book.find({ event: eventId, bookingStatus: "Confirmed" });
+        
+        const bookedSeats = bookings.reduce( (acc, booking) => acc + booking.seatsBooked, 0 );
+        
+        const totalSeats = event.capacity.totalSeats; 
+        
+        if ( totalSeats !== null && seats > (totalSeats - bookedSeats) )
+          
+          { return res.status(400).json({ success: false, message: "Not enough seats available" }); } 
+        
+        const booking = await Book.create({ event: eventId, user: userId, seatsBooked: seats });
+        
+        const qrPath = `qr/${booking._id}.png`; 
+        
+        await QRCode.toFile( qrPath, JSON.stringify({ bookingId: booking._id, eventId, userId, seats }), { width: 300 } ); 
+        
+        const qrUpload = await cloudinary.uploader.upload( qrPath, { folder: "event" } ); 
+        
+        booking.qrCodeUrl = qrUpload.secure_url; 
+        
+        booking.qrCodePublicId = qrUpload.public_id; 
+        
+        await booking.save(); 
+        
+        await sendEmail( user.email, "Your Event Ticket 🎟️", Ticket({ name: user.fullName, eventName: event.title, seats, bookingId: booking._id, qrCodeUrl: qrUpload.secure_url }) ); 
+        
+        fs.unlinkSync(qrPath); 
+        
+      res.status(200).json({ success: true, message: "Booking successful", booking });
 
   } catch (err) {
-    res.status(500).json({ message: err.message });
+
+    res.status(500).json({
+      success: false,
+      message: err.message
+    });
+
   }
+
 };
 
 export const fetechBookedUsers = async (req, res) => {

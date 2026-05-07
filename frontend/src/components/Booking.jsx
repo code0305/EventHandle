@@ -12,6 +12,7 @@ import {
 import { useContext } from "react";
 import EventContext from "../context/EventContext";
 import toast from "react-hot-toast";
+import { Load } from "./Load";
 
 const BookingDialog = ({
   open,
@@ -24,6 +25,8 @@ const BookingDialog = ({
   const [message, setMessage] = useState("");
 
   const { Book } = useContext(EventContext);
+  
+  const [loading,setLoading]=useState(false)
 
   const price = event?.pricing?.amount || 0;
   const totalSeats = event?.capacity?.totalSeats;
@@ -35,6 +38,7 @@ const BookingDialog = ({
 
   const handleBooking = async () => {
     try {
+      setLoading(true)
       const res = await Book({
         eventId: event._id,
         userId,
@@ -42,15 +46,22 @@ const BookingDialog = ({
       });
 
       toast.success(res.data.message);
-
+      toast.success("Ticket In Email")
       refreshEvent(); // 🔥 refresh seats
       onClose();
 
     } catch (err) {
       setMessage(err.response?.data?.message);
     }
+    finally{
+      setLoading(false)
+    }
   };
-
+if (loading) {
+      return (
+        <Load/>
+    );
+    }
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogContent>

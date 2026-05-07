@@ -13,7 +13,7 @@ PostRouter.get("/bookings/:eventId",fetechBookedUsers);
 PostRouter.delete("/delete/:id",authUser,DeleteEvent);
 PostRouter.put("/update/:id",authUser,upload.fields([{ name: "logo", maxCount: 1 },{ name: "banner", maxCount: 1 }]),updateEvent);
 
-PostRouter.post("/book", createBooking);
+PostRouter.post("/book",authUser,createBooking);
 PostRouter.get("/responses/:eventId", authUser, getAllResponses);
 
 PostRouter.post("/form", authUser, createFeedbackForm);
