@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
   const [data,setData]=useState([]);
-  const {eventData,UserResponse}=useContext(EventContext);
+  const {eventData,UserResponse,getForm}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
 
 const filteredData = data.filter((event) => {
@@ -50,11 +50,18 @@ useEffect(() => {
 
       for (const event of data) {
 
-        const res = await UserResponse(event._id);
-
-        if (res?.success) {
+        const res = await UserResponse(event._id); // response given
+        const res2 = await getForm(event._id);// form
+        console.log(res)
+        console.log(res2)
+        if(!res2?.success)
+        {
           submitted.push(event._id);
         }
+        if(res?.success)
+          {
+            submitted.push(event._id);
+          }
       }
 
       setSubmittedFeedbacks(submitted);

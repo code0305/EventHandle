@@ -281,7 +281,7 @@ export const getFeedbackForm = async (req, res) => {
     const form = await Form.findOne({ eventId });
 
     if (!form) {
-      return res.status(400).json({success: false,message: "No feedback form available"});
+      return res.json({success: false,message: "No feedback form available"});
     }
 
     res.status(200).json({success: true,data: form});

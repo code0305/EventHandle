@@ -16,6 +16,7 @@ import ViewPage from './components/ViewPage';
 import OnboardingPage from './pages/OnboardingPage';
 import UserContext from './context/UserContext';
 import { Load } from './components/Load';
+import PageNotFound from './components/ErrorPath';
 
 const App = () => {
   const {  authUser, Info } = useContext(UserContext);
@@ -80,6 +81,7 @@ useEffect(() => {
       <Route path='/event' element={<Events/>}/>
       <Route path ='/create-form/:id' element={<AdminForm/>}/>
       <Route path='/view/:id' element={<ViewPage/>}/>
+      <Route path='*' element={<PageNotFound/>}/>
     </Routes>
     </BrowserRouter>
     </>
