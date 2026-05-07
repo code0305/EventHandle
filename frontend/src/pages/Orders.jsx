@@ -91,7 +91,7 @@ export default function Orders() {
         const res = await allEvents();
         setData(res);
       } catch (error) {
-        console.log(error.message);
+        toast.error(error.message);
       }
       }
       fetchData();

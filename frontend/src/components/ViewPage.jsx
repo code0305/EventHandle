@@ -65,7 +65,6 @@ const fetchData = async () => {
         const res = await detailsById(id);
         if (res?.data?.success) {
           setEvent(res?.data?.data);
-          console.log(res?.data?.data);
         }
       } catch (error) {
         if (error.code === "ERR_NETWORK") {
@@ -83,7 +82,6 @@ const loadFeedbackFlow = async () => {
   try {
 
     const check = await UserResponse(id);
-    console.log(check)
     if (check.success) {
       setShowFeedback(false);
       return;
@@ -98,7 +96,7 @@ const loadFeedbackFlow = async () => {
     
 
   } catch (err) {
-    console.log(err);
+    toast.error(err.message);
   }
 };
 

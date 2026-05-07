@@ -90,7 +90,6 @@ if (eventData.bannerFiles[1]) {
         try {
         setLoading(true);
         const res = await detailsById(id);
-        console.log(res?.data?.data)
         setEventData({
         title: res?.data?.data?.title || "",
         category: res?.data?.data?.category || "",

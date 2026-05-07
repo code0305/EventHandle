@@ -74,7 +74,7 @@ export default function Navbar({setSearch,setAuthUser}) {
             setAuthUser(null);
             nav("/signin");
           } catch (error) {
-            console.log("Error Logout:"+error);
+            toast.error(error.message)
           }};
 
   const handleMobileMenuClose = () => {
