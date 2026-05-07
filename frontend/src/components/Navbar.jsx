@@ -130,7 +130,7 @@ export default function Navbar({setSearch,setAuthUser}) {
         >
           <AccountCircle />
         </IconButton>
-        <p>Logout</p>
+        <p onClick={logout}>Logout</p>
       </MenuItem>
     </Menu>
   );
