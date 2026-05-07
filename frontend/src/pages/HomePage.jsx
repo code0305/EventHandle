@@ -62,8 +62,6 @@ const HomePage=()=>{
                     break;            
       case "Update": return <UpdatePage id={id} setchoice={setChoice}/>;
                     break;
-
-      default: return <div>Welcome</div>;
     }
   }
     return (

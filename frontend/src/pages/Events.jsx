@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
   const [data,setData]=useState([]);
-  const {eventData}=useContext(EventContext);
+  const {eventData,UserResponse}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
 
 const filteredData = data.filter((event) => {
@@ -21,6 +21,8 @@ const filteredData = data.filter((event) => {
     event?.title?.toLowerCase().includes(text)
   );
 });
+
+const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
   useEffect(()=>{
     const fetchData=async()=>{
       try {
@@ -37,6 +39,38 @@ const filteredData = data.filter((event) => {
     }
     fetchData();
 },[category])
+
+useEffect(() => {
+
+  const checkFeedbacks = async () => {
+
+    try {
+
+      const submitted = [];
+
+      for (const event of data) {
+
+        const res = await UserResponse(event._id);
+
+        if (res?.success) {
+          submitted.push(event._id);
+        }
+      }
+
+      setSubmittedFeedbacks(submitted);
+
+    } catch (err) {
+      console.log(err);
+    }
+
+  };
+
+  if (data.length > 0) {
+    checkFeedbacks();
+  }
+
+}, [data]);
+
   return (
     <>
     {
@@ -130,6 +164,7 @@ const filteredData = data.filter((event) => {
             <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={()=>nav(`/create-form/${event?._id}`)}>
               <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
             </Button>
+            
             <Button variant="contained" sx={{mt:1,width:70,px:7}} onClick={() => {
               setId(event?._id);
               setChoice("Booked");
@@ -140,11 +175,25 @@ const filteredData = data.filter((event) => {
             </Box>
                 </>
               ):(<>
+            
+          {
+            event?.status==="Completed"?(submittedFeedbacks.includes(event._id) ? (<></>):(<>
             <Button variant="contained" sx={{mt:1,width:130,px:7}} 
         onClick={()=>nav(`/view/${event._id}`)}
         >
-              <Typography variant="h7" sx={{fontWeight:"bold"}}>Book</Typography>
+            <Typography variant="h7" sx={{fontWeight:"bold"}}>Feedback</Typography>
             </Button>
+            </>
+            ))
+            :(
+              <>
+              <Button variant="contained" sx={{mt:1,width:130,px:7}} 
+        onClick={()=>nav(`/view/${event._id}`)}
+        >
+            <Typography variant="h7" sx={{fontWeight:"bold"}}>Book</Typography>
+            </Button>
+            </>)
+          }
               </>)
             }
 
