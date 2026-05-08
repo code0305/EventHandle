@@ -282,32 +282,18 @@ setEventData({
 
       {eventData.modeEvent === "Offline" && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}
-          inputRef={(el)=>(cursor.current[6]=el)}
-              onKeyDown={(e)=>handleEnter(e,7)}
-              />
-          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city}
-          inputRef={(el)=>(cursor.current[7]=el)}
-              onKeyDown={(e)=>handleEnter(e,8)} />
-          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state}
-          inputRef={(el)=>(cursor.current[8]=el)}
-              onKeyDown={(e)=>handleEnter(e,9)} />
+          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}/>
+          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city}/>
+          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} />
         </Box>
       )}
 
       {eventData.modeEvent === "Hybrid" && (
         <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
           <TextField label="Meeting Link" name="connectionLink" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.connectionLink} onKeyDown={(e)=>handleEnter(e,6)} />
-          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}
-          inputRef={(el)=>(cursor.current[6]=el)}
-              onKeyDown={(e)=>handleEnter(e,7)} />
-          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city} 
-          inputRef={(el)=>(cursor.current[7]=el)}
-              onKeyDown={(e)=>handleEnter(e,8)}/>
-          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} 
-          inputRef={(el)=>(cursor.current[8]=el)}
-              // onKeyDown={(e)=>handleEnter(e,9)}
-              />
+          <TextField label="Address" name="address" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.address}/>
+          <TextField label="City" name="city" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.city} />
+          <TextField label="State" name="state" fullWidth  onChange={handleChange} sx={{mt:1}} value={eventData.state} />
         </Box>
       )}
       <TextField 
