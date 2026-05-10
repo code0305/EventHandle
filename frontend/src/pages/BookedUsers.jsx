@@ -4,6 +4,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Paper, Typography } from "@mui/material";
 import EventContext from "../context/EventContext";
+import toast from "react-hot-toast";
 
 const paginationModel = { page: 0, pageSize: 7 }; 
 
@@ -16,7 +17,6 @@ export default function BookedUsers({id}) {
     const fetchBookings = async () => {
       try {
         const res = await fetchRegistered(id);
-        console.log(res.data.bookings);
         const formatted = res.data.bookings.map((item) => ({
           id: item._id,
           name: item.user?.fullName,
@@ -28,7 +28,7 @@ export default function BookedUsers({id}) {
 
         setRows(formatted);
       } catch (err) {
-        console.log(err.message);
+        toast.error(err.message);
       }
     };
 

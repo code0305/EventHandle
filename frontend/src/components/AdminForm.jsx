@@ -1,5 +1,5 @@
 import { Box, Button, Paper, TextField, ThemeProvider, Typography } from '@mui/material'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { darkTheme } from '../constants/constant'
 import { useState } from 'react';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -16,6 +16,22 @@ const AdminForm = () => {
     const {createForm} = useContext(EventContext);
 
     const [questions, setQuestions] = useState([]);
+
+    const {getForm} = useContext(EventContext);
+    
+    const {id} = useParams()
+
+    useEffect(()=>{
+        const check=async()=>{
+          try {
+            const res1 = await getForm(id);
+          toast.success(res1?.message);
+            } catch (error) {
+              toast.error(error.message)
+          }
+        }
+        check();
+    },[id])
 
     const addQuestion = (type) => {
 
@@ -39,7 +55,6 @@ const AdminForm = () => {
         setQuestions(updated);
         };
 
-const {id} = useParams()
 const handleComplete = async()=>{
     try {
         const res = await createForm({questions,eventId:id})

@@ -74,7 +74,6 @@ if (
       newPost,
     });
   } catch (error) {
-    console.error(error);
     res.status(500).json({ success:false , message: "Error creating event" });
   }
 }
@@ -174,7 +173,6 @@ export const updateEvent = async (req, res) => {
         );
         res.status(200).json({ success: true, message: "Event Updated Successfully"});
     } catch (error) {
-        console.log(error);
         res.status(500).json({ success: false, message: "Error while updating event: " + error.message });
     }
 }
@@ -276,18 +274,24 @@ export const createFeedbackForm = async (req, res) => {
 
 export const getFeedbackForm = async (req, res) => {
   try {
+
     const { eventId } = req.params;
+    const existEvent = await Event.findById(eventId);
+    if(!existEvent)
+    {
+      return res.json({success:false,message:"Invalid Request"})
+    }
 
     const form = await Form.findOne({ eventId });
 
     if (!form) {
-      return res.json({success: false,message: "No feedback form available"});
+      return res.json({success: false,message: "No feedback form Created"});
     }
 
-    res.status(200).json({success: true,data: form});
+    res.status(200).json({success: true,message: "Feedback form available",data: form});
 
   } catch (error) {
-    res.status(500).json({ success: false, message: "Get Feedback Form error " + error.message });
+    res.json({ success: false, message: "Invalid Id"});
   }
 };
 
