@@ -284,10 +284,12 @@ export const onboard = async(req,res)=>{
     }
 
 
-        const InfoUpdate = await User.findByIdAndUpdate(id,{fullName,state,phoneNumber,profilePic,isOnboarded:true},{ new: true });
+    const InfoUpdate = await User.findByIdAndUpdate(id,{fullName,state,phoneNumber,profilePic,isOnboarded:true},{ new: true });
 
         res.status(200).json({success:true,message:"Successfully Onboarded",data:InfoUpdate})
     } catch (error) {
+        console.log(error);
+        console.log(error.message);
             return res.status(400).json({success:false,message:"Error in Onboard "+error.message})
     }
 }
