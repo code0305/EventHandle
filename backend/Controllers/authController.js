@@ -252,10 +252,10 @@ export const rating = async (req,res) => {
 
 export const onboard = async(req,res)=>{
     try {
-        const {fullName,state,phoneNumber,language}=req.body;
+        const {fullName,state,phoneNumber}=req.body;
         const id = req.user.id
         let profilePic = null;
-        if(!fullName || !state || !phoneNumber || !language)
+        if(!fullName || !state || !phoneNumber )
         {
             return res.status(400).json({success:false,message:"Fill all Fields"})
         }
@@ -284,7 +284,7 @@ export const onboard = async(req,res)=>{
     }
 
 
-        const InfoUpdate = await User.findByIdAndUpdate(id,{fullName,state,phoneNumber,language,profilePic,isOnboarded:true},{ new: true });
+        const InfoUpdate = await User.findByIdAndUpdate(id,{fullName,state,phoneNumber,profilePic,isOnboarded:true},{ new: true });
 
         res.status(200).json({success:true,message:"Successfully Onboarded",data:InfoUpdate})
     } catch (error) {
