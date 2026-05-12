@@ -1,7 +1,6 @@
 import { Event } from "../model/Event.js";
 import { Form } from "../model/FeedbackForm.js";
 import cloudinary from "../services/cloudinary.js";
-import PDFDocument from "pdfkit";
 import QRCode from "qrcode";
 import fs from "fs";
 import { updateEventStatuses } from "../util/updateStatus.js";
