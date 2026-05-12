@@ -5,6 +5,7 @@ import { useParams } from "react-router-dom";
 import { Paper, Typography } from "@mui/material";
 import EventContext from "../context/EventContext";
 import toast from "react-hot-toast";
+import { Load } from "../components/Load";
 
 const paginationModel = { page: 0, pageSize: 7 }; 
 
@@ -12,10 +13,11 @@ export default function BookedUsers({id}) {
 
   const [rows, setRows] = useState([]);
   const {fetchRegistered}=useContext(EventContext)
-
+  const [loading,setLoading]=useState(false)
   useEffect(() => {
     const fetchBookings = async () => {
       try {
+        setLoading(true)
         const res = await fetchRegistered(id);
         const formatted = res.data.bookings.map((item) => ({
           id: item._id,
@@ -30,10 +32,18 @@ export default function BookedUsers({id}) {
       } catch (err) {
         toast.error(err.message);
       }
+      finally{
+        setLoading(false)
+      }
     };
 
     fetchBookings();
   }, [id]);
+
+  if(loading)
+  {
+    return(<Load/>)
+  }
 
   const columns = [
     { field: "name", headerName: "User Name", flex: 1 },

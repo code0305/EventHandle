@@ -7,6 +7,7 @@ import { useContext } from 'react';
 import EventContext from '../context/EventContext';
 import { useNavigate, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { Load } from './Load';
 
 
 const AdminForm = () => {
@@ -21,18 +22,28 @@ const AdminForm = () => {
     
     const {id} = useParams()
 
+    const [loading,setLoading]=useState(false)
+
     useEffect(()=>{
         const check=async()=>{
           try {
+            setLoading(true)
             const res1 = await getForm(id);
           toast.success(res1?.message);
             } catch (error) {
-              toast.error(error.message)
+              toast.error(error.response.data.message)
+          }
+          finally{
+            setLoading(false)
           }
         }
         check();
     },[id])
 
+    if(loading)
+    {
+      return (<Load/>)
+    }
     const addQuestion = (type) => {
 
     setQuestions([...questions,

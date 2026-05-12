@@ -7,12 +7,14 @@ import { useContext } from "react";
 import UserContext from "../context/UserContext";
 import { darkTheme } from "../constants/constant";
 import toast from "react-hot-toast";
+import { Load } from "../components/Load";
 
 
 export default function SignUpPage(){
     const {handleRegister} = useContext(UserContext);
     const nav = useNavigate();
     const[isValid,setIsValid]=useState(true);
+    const[loading,setLoading]=useState(false)
     const [data,setData]=useState({
       fullName:'',email:'',password:''
     });
@@ -26,6 +28,7 @@ export default function SignUpPage(){
     }
     const handleSignup =async()=>{
       try {
+        setLoading(true)
         const res = await handleRegister(data)
         toast.success(res?.data?.message);
         if(res?.data?.success)
@@ -45,6 +48,13 @@ export default function SignUpPage(){
         toast.error(error?.response?.data?.message);
       }
     }
+    finally{
+      setLoading(false)
+    }
+    }
+    if(loading)
+    {
+      return(<Load/>)
     }
     return(
     <ThemeProvider theme={darkTheme}>

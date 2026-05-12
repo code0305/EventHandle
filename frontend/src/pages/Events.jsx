@@ -5,12 +5,14 @@ import EventContext from '../context/EventContext';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
+import { Load } from '../components/Load';
 
 const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
   const [data,setData]=useState([]);
   const {eventData,UserResponse,getForm}=useContext(EventContext);
   const {authUser}=useContext(UserContext);
+  const[loading,setLoading]=useState(false);
 
 const filteredData = data.filter((event) => {
   if (!search) return true;
@@ -26,6 +28,7 @@ const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
   useEffect(()=>{
     const fetchData=async()=>{
       try {
+        setLoading(true);
         const res = await eventData(category);
         console.log(res?.data?.data)
         setData(res?.data?.data);
@@ -36,6 +39,9 @@ const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
         toast.error(error?.response?.data?.message);
       }
     }
+    finally{
+      setLoading(false)
+    }
     }
     fetchData();
 },[category])
@@ -45,7 +51,7 @@ useEffect(() => {
   const checkFeedbacks = async () => {
 
     try {
-
+      setLoading(true)
       const submitted = [];
 
       for (const event of data) {
@@ -67,7 +73,10 @@ useEffect(() => {
       setSubmittedFeedbacks(submitted);
 
     } catch (err) {
-      console.log(err);
+      toast.error(err.response.data.message);
+    }
+    finally{
+      setLoading(true)
     }
 
   };
@@ -77,6 +86,11 @@ useEffect(() => {
   }
 
 }, [data]);
+
+if(loading)
+{
+  return <Load/>
+}
 
   return (
     <>
