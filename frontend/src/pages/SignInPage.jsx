@@ -66,6 +66,11 @@ export default function SignInPage() {
         }}
       >
         <Paper
+          component="form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleConfirm();
+          }}
           elevation={12}
           sx={{
             p: 4,
@@ -87,6 +92,7 @@ export default function SignInPage() {
             label="Email"
             margin="normal"
             variant="outlined"
+            autoComplete="username"
             onChange={handleChange}
             name="email"
             value={form.email}
