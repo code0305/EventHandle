@@ -1,7 +1,5 @@
 import nodemailer from "nodemailer"
 import "dotenv/config";
-// Create a transporter using Ethereal test credentials.
-// For production, replace with your actual SMTP server details.
 const transporter = nodemailer.createTransport({
     service:'gmail',
   auth: {
