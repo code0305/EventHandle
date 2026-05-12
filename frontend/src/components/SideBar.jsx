@@ -71,11 +71,19 @@ export const SideBar = ({authUser , active , setActive}) => {
             </Avatar>
 
             <Typography
-              color="primary"
-              fontWeight="bold"
-            >
-              {authUser?.fullName}
-            </Typography>
+          color="primary"
+          fontWeight="bold"
+          noWrap
+          sx={{
+            maxWidth: "100%",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            fontSize: "14px"
+          }}
+        >
+          {authUser?.fullName}
+        </Typography>
           </Box>
           </Box>
         </Box>
@@ -138,18 +146,26 @@ export const SideBar = ({authUser , active , setActive}) => {
           <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2 }}>
             <Avatar
               src={authUser?.profilePic?.mediaUrl}
-              sx={{ width: 50, height: 60 }}
+              sx={{ width: 50, height: 55 }}
             >
               {!authUser?.profilePic?.mediaUrl &&
                 authUser?.fullName?.charAt(0)?.toUpperCase()}
             </Avatar>
 
             <Typography
-              color="primary"
-              fontWeight="bold"
-            >
-              {authUser?.fullName}
-            </Typography>
+            color="primary"
+            fontWeight="bold"
+            noWrap
+            sx={{
+              maxWidth: "100%",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+              whiteSpace: "nowrap",
+              fontSize: "14px"
+            }}
+          >
+            {authUser?.fullName}
+          </Typography>
           </Box>
 
           </Box>
