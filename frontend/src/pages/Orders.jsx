@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import toast from 'react-hot-toast';
 import ConfirmDelete from '../components/Warning';
 import { useNavigate } from 'react-router-dom';
+import { Load } from '../components/Load';
 
 const paginationModel = { page: 0, pageSize: 7 };
 
@@ -15,6 +16,7 @@ const paginationModel = { page: 0, pageSize: 7 };
 export default function Orders() {
     const{allEvents,deleteEvent}=useContext(EventContext);
       const [open, setOpen] = useState(false);
+      const[loading,setLoading]=useState(false);
   const [selectedId, setSelectedId] = useState(null);
 
   const handleDeleteClick = (id) => {
@@ -86,6 +88,7 @@ export default function Orders() {
     }
 
     useEffect(()=>{
+      setLoading(true)
       const fetchData = async()=>{
       try {
         const res = await allEvents();
@@ -93,10 +96,17 @@ export default function Orders() {
       } catch (error) {
         toast.error(error.message);
       }
+      finally{
+        setLoading(false)
+      }
       }
       fetchData();
     }
     ,[])
+    if(loading)
+    {
+      return <Load/>
+    }
   return (
 
     <Paper sx={{ height: 500, width: '100%', background: "#020617" }}>

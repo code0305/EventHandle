@@ -15,7 +15,7 @@ import {
 import { CameraAlt as CameraAltIcon } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { ThemeProvider } from '@mui/material/styles';
-import { darkTheme, languages, states } from '../constants/constant';
+import { darkTheme, states } from '../constants/constant';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 
@@ -27,7 +27,6 @@ const OnboardingPage = () => {
   const [formData, setFormData] = useState({
     fullName: '',
     profilePic: null,
-    language: '',
     state: '',
     phoneNumber: ''
   });
@@ -63,7 +62,6 @@ const OnboardingPage = () => {
     const form = new FormData();
     form.append("fullName", formData.fullName);
     form.append("profilePic", formData.profilePic);
-    form.append("language", formData.language);
     form.append("phoneNumber", formData.phoneNumber);  
     form.append("state", formData.state);  
     const res = await onboard(form);
@@ -178,24 +176,7 @@ const OnboardingPage = () => {
               margin="normal"
             />
 
-            <FormControl fullWidth margin="normal">
-              <InputLabel>Language</InputLabel>
-              <Select
-                name="language"
-                value={formData.language}
-                label="Language"
-                onChange={handleInputChange}
-              >
-                <MenuItem value="">
-                  <em>Select your state</em>
-                </MenuItem>
-                {languages.map((lang) => (
-                  <MenuItem key={lang.label} value={lang.label}>
-                    {lang.label}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+            
 
             <FormControl fullWidth margin="normal">
               <InputLabel>State</InputLabel>

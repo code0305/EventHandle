@@ -24,9 +24,6 @@ const userSchema = new mongoose.Schema({
                 type:String
                 },
     },
-    language:{
-        type:String,
-    },
     isOnboarded:{
         type:Boolean,
         default:false

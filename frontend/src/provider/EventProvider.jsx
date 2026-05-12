@@ -121,6 +121,17 @@ const EventProvider =({children})=>{
             throw error;
         }
     }
+
+const getResponse = async (eventName) => {
+  try {
+
+    const res = await axios.get(`${BaseUrl}/post/admin/response-sheet/${eventName}`);
+    return res;
+
+  } catch (error) {
+    throw error;
+  }
+};
     const value ={
         addEvent,
         allEvents,
@@ -133,8 +144,8 @@ const EventProvider =({children})=>{
         fetchRegistered,
         SubmitFeedback,
         getForm,
-        UserResponse
-         
+        UserResponse,
+        getResponse
     }
     return(
         <EventContext.Provider value={value}>

@@ -103,18 +103,7 @@ export default function Navbar({setSearch,setAuthUser}) {
       onClose={handleMobileMenuClose}
     >
       
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge badgeContent={17} color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+      
       <MenuItem
   sx={{
     "&:hover": {
@@ -160,15 +149,7 @@ export default function Navbar({setSearch,setAuthUser}) {
           </Search>
           <Box/>
           <Box sx={{ display: { xs: 'none', md: 'flex',gap:1 } }}>
-            <IconButton
-              size="small"
-              aria-label="show 17 new notifications"
-              color="inherit"
-            >
-              <Badge badgeContent={17} color="error">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
+            
             <Button
             onClick={logout}
   sx={{

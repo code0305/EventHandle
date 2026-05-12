@@ -366,20 +366,67 @@ export const getUserResponse = async (req,res) => {
   }
 }
 
-export const getAllResponses = async (req, res) => {
+
+export const getEventResponseSheet = async (req, res) => {
   try {
-    const { eventId } = req.params;
 
-    const responses = await FeedbackResponse.find({ eventId });
+    const { eventName } = req.params;
 
-    res.status(200).json({success: true,data: responses});
+    const event = await Event.findOne({title: eventName});
+
+    if (!event) {
+      return res.status(404).json({success: false,message: "Event not found"});
+    }
+
+    const form = await Form.findOne({eventId: event._id,});
+
+    if (!form) {
+      return res.status(404).json({success: false,message: "Feedback form not found",});
+    }
+
+    const responses = await Response.find({eventId: event._id,}).populate("userId", "fullName email");
+
+    const headers = [
+      "Name",
+      ...form.questions.map((q) => q.question),
+    ];
+
+    const rows = responses.map((response) => {
+
+      const row = {
+        Name: response.userId?.fullName || "-",
+      };
+
+      form.questions.forEach((question) => {
+
+        const answer = response.responses.find(
+          (r) => r.questionId === question.questionId
+        );
+
+        row[question.question] = answer
+          ? answer.answer
+          : "-";
+      });
+
+      return row;
+    });
+
+    res.status(200).json({
+      success: true,
+      headers,
+      rows,
+    });
 
   } catch (error) {
-    res.status(500).json({ success:false,message: "Response error"+error.message });
+
+    res.status(500).json({
+      success: false,
+      message: error.message,
+    });
+
   }
 };
 
-// Booking
 
 
 

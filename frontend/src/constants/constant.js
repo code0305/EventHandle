@@ -6,18 +6,6 @@ import SportsIcon from '../assets/sports.jpg';
 import CulturalIcons from "../assets/Cultural.webp";
 import { createTheme } from "@mui/material";
 
-export const mostSpokenLanguages = [
-  "English",
-  "Mandarin Chinese",
-  "Hindi",
-  "Spanish",
-  "French",
-  "Modern Standard Arabic",
-  "Bengali",
-  "Portuguese",
-  "Russian",
-  "Urdu"
-];
 
 export const images=[
   {name:'Technology',src:TechnologyIcon},

@@ -13,6 +13,7 @@ import StarLayout from "../components/StarLayout";
 import Events from "./Events";
 import UpdatePage from "./UpdatePage";
 import BookedUsers from "./BookedUsers";
+import AdminResponseSheet from "./AdminResponseSheet";
 
 const HomePage=()=>{
     
@@ -61,6 +62,8 @@ const HomePage=()=>{
                     break;            
       case "Update": return <UpdatePage id={id} setchoice={setChoice}/>;
                     break;
+      case "Reports":return <AdminResponseSheet  setchoice={setChoice}/>;
+      break;
     }
   }
     return (
