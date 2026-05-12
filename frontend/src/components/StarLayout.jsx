@@ -22,7 +22,7 @@ export default function StarLayout({setSelectedCategory,setChoice}) {
       lg: 600
     },
     marginTop:5}}>
-      <Grid container spacing={{ xs: 5, sm:6, md: 7 }} columns={{ xs: 1, sm: 2, md: 3 }}  >
+      <Grid container spacing={{ xs: 4, sm:5, md: 6 }} columns={{ xs: 1, sm: 2, md: 3 }}  >
 {images.map((item, index) => (
   <Grid key={index} xs={6} sm={4} md={3} sx={{mt:2}}>
     <Item
