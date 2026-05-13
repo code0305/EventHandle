@@ -28,7 +28,6 @@ const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
   useEffect(()=>{
     const fetchData=async()=>{
       try {
-        setLoading(true);
         const res = await eventData(category);
         console.log(res?.data?.data)
         setData(res?.data?.data);
@@ -38,9 +37,6 @@ const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
       } else {
         toast.error(error?.response?.data?.message);
       }
-    }
-    finally{
-      setLoading(false)
     }
     }
     fetchData();
