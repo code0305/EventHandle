@@ -67,10 +67,16 @@ if (loading) {
         <Typography variant="h6"sx={{mb:1,textAlign:"center"}}>
           Book Tickets
         </Typography>
-
-        <Typography sx={{mb:1}}>
+        {
+          price===0?(<>
+          <Typography sx={{mb:1}}>
+          Price: Free
+        </Typography></>):(<>
+          <Typography sx={{mb:1}}>
           Price: ₹{price}
-        </Typography>
+        </Typography></>)
+        }
+        
 
         {isUnlimited ? (
           <Typography color="green" sx={{mb:1}}>
