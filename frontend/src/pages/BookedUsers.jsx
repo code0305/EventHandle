@@ -42,7 +42,7 @@ export default function BookedUsers({id}) {
 
   if(loading)
   {
-    return(<Load/>)
+    return <Load/>;
   }
 
   const columns = [

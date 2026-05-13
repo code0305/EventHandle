@@ -47,7 +47,6 @@ useEffect(() => {
   const checkFeedbacks = async () => {
 
     try {
-      setLoading(true)
       const submitted = [];
 
       for (const event of data) {
@@ -71,9 +70,6 @@ useEffect(() => {
     } catch (err) {
       toast.error(err.response.data.message);
     }
-    finally{
-      setLoading(true)
-    }
 
   };
 
@@ -85,7 +81,7 @@ useEffect(() => {
 
 if(loading)
 {
-  return <Load/>
+  return <Load/>;
 }
 
   return (

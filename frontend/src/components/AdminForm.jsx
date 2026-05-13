@@ -42,7 +42,7 @@ const AdminForm = () => {
 
     if(loading)
     {
-      return <Load/>
+      return <Load/>;
     }
     const addQuestion = (type) => {
 

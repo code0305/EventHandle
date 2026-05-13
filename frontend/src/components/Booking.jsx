@@ -51,7 +51,7 @@ const BookingDialog = ({
       onClose();
 
     } catch (err) {
-      setMessage(err.response?.data?.message);
+      toast.error(err.response?.data?.message);
     }
     finally{
       setLoading(false)
