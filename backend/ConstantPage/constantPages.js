@@ -75,7 +75,7 @@ export const tokenTemplate = ({ token }) => {
   `;
 };
 
-export const Ticket = ({ name, eventName, seats, bookingId, qrCodeUrl }) => { 
+export const Ticket = ({ name, eventName, seats, qrCodeUrl }) => { 
   return ` 
   <div style=" margin:0; padding:40px 20px; background:#eef2ff; font-family:Arial,sans-serif; "> 
     <div style=" max-width:650px; margin:auto; background:white; border-radius:24px; overflow:hidden; box-shadow:0 15px 40px rgba(0,0,0,0.12); "> 
@@ -96,10 +96,6 @@ export const Ticket = ({ name, eventName, seats, bookingId, qrCodeUrl }) => {
                 <td style=" padding:18px; font-weight:bold; color:#374151; "> Seats </td> 
                 <td style=" padding:18px; color:#111827; "> ${seats} </td> 
               </tr> 
-              <tr style="background:#f9fafb;"> 
-                <td style=" padding:18px; font-weight:bold; color:#374151; "> Booking ID </td> 
-                <td style=" padding:18px; color:#111827; word-break:break-all; "> ${bookingId} </td>
-              </tr>
             </table>
           </div> 
           <div style=" margin-top:45px; text-align:center; "> 

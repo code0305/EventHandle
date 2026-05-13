@@ -11,7 +11,7 @@ const server = express();
 const PORT = process.env.PORT
 
 server.use(cors({
-    origin:['https://event-handle-qy9e.vercel.app'],
+    origin:['https://event-handle-qy9e.vercel.app','http://localhost:5173'],
     credentials:true,
 }));
 

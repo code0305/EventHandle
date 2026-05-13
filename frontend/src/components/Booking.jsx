@@ -58,9 +58,7 @@ const BookingDialog = ({
     }
   };
 if (loading) {
-      return (
-        <Load/>
-    );
+      return (<Load/>);
     }
   return (
     <Dialog open={open} onClose={onClose}>

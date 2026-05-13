@@ -462,7 +462,7 @@ export const createBooking = async (req, res) => {
         
         await booking.save(); 
         
-        await sendEmail( user.email, "Your Event Ticket 🎟️", Ticket({ name: user.fullName, eventName: event.title, seats, bookingId: booking._id, qrCodeUrl: qrUpload.secure_url }) ); 
+        await sendEmail( user.email, "Your Event Ticket 🎟️", Ticket({ name: user.fullName, eventName: event.title, seats, qrCodeUrl: qrUpload.secure_url }) ); 
         
         fs.unlinkSync(qrPath); 
         

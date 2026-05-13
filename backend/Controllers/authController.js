@@ -39,8 +39,7 @@ export const signin =async(req,res)=>{
     await existingUser.save();
      res.status(200).json({success:true ,message:"Sucessfully Logged In",data:existingUser});
     } catch (error) {
-    console.log("Error in SignIn Function");
-    return res.status(400).json({success:false,message:"Error in SignIn Function"});
+    return res.status(400).json({success:false,message:"Error in SignIn Function"+error.message});
     }
 }
 

@@ -19,6 +19,7 @@ import { useState } from 'react';
 import { useContext } from 'react';
 import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
+import { Load } from './Load';
 const Search = styled('div')(({ theme }) => ({
   position: 'relative',
   borderRadius: theme.shape.borderRadius,
@@ -67,15 +68,20 @@ export default function Navbar({setSearch,setAuthUser}) {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = useState(null);
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+  const [loading,setLoading]=useState(false);
     const logout = async () => {
           try {
+            setLoading(true)
             const res = await Logout();
             toast.success(res?.data?.message)
             setAuthUser(null);
             nav("/signin");
           } catch (error) {
             toast.error(error.message)
-          }};
+          }
+        finally{
+          setLoading(false)
+        }};
 
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
@@ -123,6 +129,9 @@ export default function Navbar({setSearch,setAuthUser}) {
       </MenuItem>
     </Menu>
   );
+  if(loading){
+    return <Load/>;
+  }
 
   return (
     <Box>
