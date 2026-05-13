@@ -3,8 +3,8 @@ import "dotenv/config";
 const transporter = nodemailer.createTransport({
     service:'gmail',
   auth: {
-    user: process.env.user_email,
-    pass: process.env.user_password,
+    user: process.env.USER_EMAIL,
+    pass: process.env.USER_PASSWORD,
   },
   family: 4,
 });
@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 const sendEmail = async (to,subject,html) => {
     await transporter.sendMail(
         {
-            from:process.env.user_email,
+            from:process.env.USER_EMAIL,
             to,
             subject,
             html
