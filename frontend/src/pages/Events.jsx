@@ -6,7 +6,6 @@ import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Load } from '../components/Load';
-import { set } from 'mongoose';
 
 const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
