@@ -6,6 +6,7 @@ import UserContext from '../context/UserContext';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { Load } from '../components/Load';
+import { set } from 'mongoose';
 
 const Events = ({ category,setChoice,setId,search }) => {
   const nav = useNavigate();
@@ -26,6 +27,7 @@ const filteredData = data.filter((event) => {
 
 const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
   useEffect(()=>{
+    setLoading(true);
     const fetchData=async()=>{
       try {
         const res = await eventData(category);
@@ -37,6 +39,9 @@ const [submittedFeedbacks, setSubmittedFeedbacks] = useState([]);
       } else {
         toast.error(error?.response?.data?.message);
       }
+    }
+    finally{
+      setLoading(false);
     }
     }
     fetchData();
