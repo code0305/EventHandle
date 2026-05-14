@@ -1,22 +1,39 @@
-import nodemailer from "nodemailer"
+import nodemailer from "nodemailer";
 import "dotenv/config";
 const transporter = nodemailer.createTransport({
-    service:'gmail',
+  host: process.env.MAILTRAP_HOST,
+  port: Number(process.env.MAILTRAP_PORT),
+
   auth: {
-    user: process.env.USER_EMAIL,
-    pass: process.env.USER_PASSWORD,
+    user: process.env.MAILTRAP_USER,
+    pass: process.env.MAILTRAP_PASS,
   },
-  family: 4,
 });
 
-const sendEmail = async (to,subject,html) => {
-    await transporter.sendMail(
-        {
-            from:process.env.USER_EMAIL,
-            to,
-            subject,
-            html
-        }
-    )
-}
+transporter.verify((error, success) => {
+  if (error) {
+    console.log("Mailtrap Error:", error);
+  } else {
+    console.log("Mailtrap Connected");
+  }
+});
+
+const sendEmail = async (to, subject, html) => {
+  try {
+    const info = await transporter.sendMail({
+      from: process.env.MAILTRAP_SENDER,
+      to,
+      subject,
+      html,
+    });
+
+    console.log("Email Sent:", info.messageId);
+
+    return info;
+
+  } catch (error) {
+    throw error;
+  }
+};
+
 export default sendEmail;
