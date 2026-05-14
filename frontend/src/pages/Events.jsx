@@ -146,7 +146,7 @@ if(loading)
               {event?.description}
             </Typography>
               <Typography variant="h6" fontWeight="bold" sx={{mt:1}}>
-              {event?.pricing?.amount=== null ? "Free" : `₹${event?.pricing?.amount}`}
+              {event?.pricing?.amount > 0 ? `₹${event?.pricing?.amount}` : "Free"}
             </Typography>
           </Box>
           <Box
