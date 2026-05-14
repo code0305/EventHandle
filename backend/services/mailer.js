@@ -1,21 +1,41 @@
+// import nodemailer from "nodemailer"
+// import "dotenv/config";
+// const transporter = nodemailer.createTransport({
+//     service:'gmail',
+//   auth: {
+//     user: process.env.USER_EMAIL,
+//     pass: process.env.USER_PASSWORD,
+//   },
+//   family: 4,
+// });
+
+// const sendEmail = async (to,subject,html) => {
+//     await transporter.sendMail(
+//         {
+//             from:process.env.USER_EMAIL,
+//             to,
+//             subject,
+//             html
+//         }
+//     )
+// }
+// export default sendEmail;
+
 import nodemailer from "nodemailer";
 import "dotenv/config";
+
 const transporter = nodemailer.createTransport({
   host: process.env.MAILTRAP_HOST,
-  port: Number(process.env.MAILTRAP_PORT),
+  port: 587,
 
   auth: {
     user: process.env.MAILTRAP_USER,
     pass: process.env.MAILTRAP_PASS,
   },
-});
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.log("Mailtrap Error:", error);
-  } else {
-    console.log("Mailtrap Connected");
-  }
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 10000,
 });
 
 const sendEmail = async (to, subject, html) => {
@@ -27,13 +47,14 @@ const sendEmail = async (to, subject, html) => {
       html,
     });
 
-    console.log("Email Sent:", info.messageId);
+    console.log(info.messageId);
 
-    return info;
+    return true;
 
   } catch (error) {
-    throw error;
+    console.log(error);
+
+    return false;
   }
 };
-
 export default sendEmail;

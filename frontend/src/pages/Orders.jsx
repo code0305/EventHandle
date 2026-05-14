@@ -83,7 +83,7 @@ export default function Orders() {
      if (data.length>0) 
       {
       data.map((item, index)=>{
-        rows.push({id:item._id,Organizer:item.organizer.name,Email:item.organizer.email,Name:item.title,Category:item.category,Amount:item.pricing.amount,StartDate:item.schedule.startDate.split('T')[0],Status:item.status});
+        rows.push({id:item._id,Organizer:item.organizer.name,Email:item.organizer.email,Name:item.title,Category:item.category,Amount:item.pricing.amount>0 ? `₹${item.pricing.amount}` : "Free",StartDate:item.schedule.startDate.split('T')[0],Status:item.status});
       })
     }
 
