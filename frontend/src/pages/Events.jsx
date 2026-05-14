@@ -190,7 +190,7 @@ if(loading)
               ):(<>
             
           {
-            event?.status==="Completed"?(submittedFeedbacks.includes(event._id) ? (<></>):(<>
+            event?.status==="Completed"||event?.status==="Ongoing"?(submittedFeedbacks.includes(event._id) ? (<></>):(<>
             <Button variant="contained" sx={{mt:1,width:130,px:7}} 
         onClick={()=>nav(`/view/${event._id}`)}
         >
